@@ -55,7 +55,7 @@ function createWindow() {
     })
 
     // This is a global shortcut to activate Cadbury with hotkey(s)
-    globalShortcut.register('Alt+Space', () => {
+    globalShortcut.register(':', () => {
         // console.log('Electron loves global shortcuts!')
         if (mainWindow.isVisible()) {
             mainWindow.hide()
