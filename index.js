@@ -16,8 +16,11 @@ document.getElementById("showAnswer").addEventListener("click", function (event)
         if ((item.keywords).includes(searchCommand)) {
 
             // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
-            answerEmojis += item.char;
+            answerEmojis += `
+                ${item.char} ${item.name} </br>
+            `
         }
+
     })
 
     // If there are no matching emojis

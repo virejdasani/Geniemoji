@@ -4,7 +4,7 @@ const emojis = [
         "codes": "1F600",
         "char": "😀",
         "name": "grinning face",
-        "keywords": "face | grin | grinning face | virej"
+        "keywords": "face | grin | grinning face"
     },
     {
         "no": 2,
