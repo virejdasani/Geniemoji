@@ -47,7 +47,7 @@ function createWindow() {
     })
 
     // This is for the tiny popup that shows up on hovering the icon
-    tray.setToolTip('Emojenie')
+    tray.setToolTip('Geniemoji')
 
     // This is when the window is not in focus
     mainWindow.on('blur', () => {
@@ -55,7 +55,7 @@ function createWindow() {
     })
 
     // This is a global shortcut to activate Cadbury with hotkey(s)
-    globalShortcut.register(':', () => {
+    globalShortcut.register('Control+e', () => {
         // console.log('Electron loves global shortcuts!')
         if (mainWindow.isVisible()) {
             mainWindow.hide()
