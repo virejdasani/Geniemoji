@@ -23,7 +23,6 @@ function search() {
                 </br>
             ` // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
         }
-
     })
 
     // If there are no matching emojis
