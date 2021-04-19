@@ -16,10 +16,10 @@ function search() {
 
             // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
             answerEmojis += `
-                <div id="emojiColumn">
+                <button id="emojiColumn">
                     ${item.char}
                     ${item.name}
-                </div>
+                </button>
                 </br>
             ` // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
         }
@@ -40,3 +40,7 @@ function search() {
     // Displays all the matching emojis in the answer html div
     document.getElementById('answer').innerHTML = answerEmojis
 }
+
+// TODO
+// Copy emoji when button is pressed
+// Try adding support for arrow keys if not possible, mention somewhere to let users know to use 'tab' to go from one emoji to next

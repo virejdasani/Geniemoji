@@ -43,4 +43,8 @@
 #emojiColumn {
     padding-top: 1px;
     padding-bottom: 1px;
+    border: none;
+    border-radius: 4px;
+    padding: 3px;
+    margin: 2px;
 }
