@@ -22,7 +22,7 @@ document.getElementById("showAnswer").addEventListener("click", function (event)
                     ${item.name}
                 </div>
                 </br>
-            `
+            ` // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
         }
 
     })
