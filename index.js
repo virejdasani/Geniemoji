@@ -17,7 +17,11 @@ document.getElementById("showAnswer").addEventListener("click", function (event)
 
             // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
             answerEmojis += `
-                ${item.char} ${item.name} </br>
+                <div id="emojiColumn">
+                    ${item.char}
+                    ${item.name}
+                </div>
+                </br>
             `
         }
 
@@ -25,9 +29,9 @@ document.getElementById("showAnswer").addEventListener("click", function (event)
 
     // If there are no matching emojis
     if (typeof(answerEmojis) !== 'string') {
-        answerEmojis = 'No matching emojis found 😢'
-        console.log('if')
-        typeof(answerEmojis)
+        answerEmojis = `
+            <h3 id="displayedEmojiName">No matching emojis found 😢</h3>
+        `
     }
 
     // answerEmojis returns 'undefined' before all the emojis. This is probably a zero index error but this works for now. Whenever this happens, the code below removes 'undefined' from the answer string
