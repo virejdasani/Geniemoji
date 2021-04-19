@@ -1,10 +1,9 @@
+// Whenever a key is pressed, the search() function is executed. With this, matching emojis are displayed as the user is typing
+document.addEventListener('keydown', search)
+
 var searchCommand
 
-// This is executed when the ask button is pressed
-document.getElementById("showAnswer").addEventListener("click", function (event) {
-    // This prevents refresh
-    event.preventDefault()
-
+function search() {
     // Get the value of the search input
     searchCommand = document.getElementById("commandInput").value.toLowerCase()
 
@@ -28,7 +27,7 @@ document.getElementById("showAnswer").addEventListener("click", function (event)
     })
 
     // If there are no matching emojis
-    if (typeof(answerEmojis) !== 'string') {
+    if (typeof (answerEmojis) !== 'string') {
         answerEmojis = `
             <h3 id="displayedEmojiName">No matching emojis found 😢</h3>
         `
@@ -41,6 +40,4 @@ document.getElementById("showAnswer").addEventListener("click", function (event)
 
     // Displays all the matching emojis in the answer html div
     document.getElementById('answer').innerHTML = answerEmojis
-
-}) 
-// TODO - make it hot reload instead of showing results when enter is pressed
+}
