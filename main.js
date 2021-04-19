@@ -47,7 +47,7 @@ function createWindow() {
     })
 
     // This is for the tiny popup that shows up on hovering the icon
-    tray.setToolTip('Cadbury')
+    tray.setToolTip('Emojenie')
 
     // This is when the window is not in focus
     mainWindow.on('blur', () => {

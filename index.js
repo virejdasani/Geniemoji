@@ -15,7 +15,7 @@ document.getElementById("showAnswer").addEventListener("click", function (event)
         // This is executed if emojis.keywords (from emojis.js) has the same word as the user input
         if ((item.keywords).includes(searchCommand)) {
 
-            // All the matching emojis are appended into answerEmojis
+            // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
             answerEmojis += item.char;
         }
     })
