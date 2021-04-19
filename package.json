@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/virejdasani/Emojenie/issues"
   },
-  "homepage": "https://github.com/virejdasani/Emojenie#readme"
+  "homepage": "https://github.com/virejdasani/Emojenie#readme",
+  "dependencies": {
+    "electron": "^12.0.4"
+  }
 }

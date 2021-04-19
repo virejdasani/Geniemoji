@@ -1,0 +1,64 @@
+* {
+    background-color: #171717;
+    color: white;
+}
+
+.app {
+    text-align: center;
+    margin-top: 6%;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding: 10px;
+}
+
+.title {
+    margin-bottom: 3%;
+    font-weight: 10000;
+}
+
+.button {
+    background-color: #419e44;
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 6px;
+    transition-duration: 0.4s;
+}
+
+.button:hover {
+    background-color: #347c38;
+}
+
+
+#commandInput {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+    max-width: 92%;
+}
+
+#greeting {
+    font-weight: normal;
+    font-style: italic;
+    padding-bottom: 2%;
+    font-size: medium;
+}
+
+#dateTime {
+    display: inline;
+    font-weight: bolder;
+}
+
+#answer {
+    margin-top: 2%;
+    font-size: xx-large;
+    font-weight: bolder;
+}
+
+#askBtn {
+    margin-top: 1.2%;
+}
