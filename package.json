@@ -1,0 +1,25 @@
+{
+  "name": "emojenie",
+  "version": "1.0.0",
+  "description": "The Emoji Genie",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virejdasani/Emojenie.git"
+  },
+  "keywords": [
+    "Emoji",
+    "Genie",
+    "Emogenie",
+    "Emojenie"
+  ],
+  "author": "Virej Dasani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/virejdasani/Emojenie/issues"
+  },
+  "homepage": "https://github.com/virejdasani/Emojenie#readme"
+}
