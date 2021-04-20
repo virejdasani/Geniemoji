@@ -54,12 +54,19 @@ function createWindow() {
         mainWindow.hide()
     })
 
-    // This is a global shortcut to activate Cadbury with hotkey(s)
+    // This is a global shortcut to activate Geniemoji with hotkey(s)
     globalShortcut.register('Control+e', () => {
         if (mainWindow.isVisible()) {
             mainWindow.hide()
         } else {
             mainWindow.show()
+        }
+    })
+
+    // This is to hide window when Esc is pressed
+    globalShortcut.register('Esc', () => {
+        if (mainWindow.isVisible()) {
+            mainWindow.hide()
         }
     })
 
