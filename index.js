@@ -16,7 +16,7 @@ function search() {
 
             // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
             answerEmojis += `
-                <button emojiChar="${item.char}" onclick="copyEmoji(this)" id="emojiButton">
+                <button type="button" emojiChar="${item.char}" onclick="copyEmoji(this)" id="emojiButton">
                     ${item.char}
                     ${item.name}
                 </button>
@@ -41,8 +41,9 @@ function search() {
     document.getElementById('answer').innerHTML = answerEmojis
 }
 
-// 
+// This is executed when an emoji button is pressed
 function copyEmoji(button) {
+    // This gets the 'emojiChar' attribute from the answer div and stores it in emojiChar
     var emojiChar = button.getAttribute('emojiChar')
     alert(emojiChar)
 }
