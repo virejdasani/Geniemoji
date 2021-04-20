@@ -1502,21 +1502,21 @@ const emojis = [
         "codes": "1F9DE",
         "char": "🧞",
         "name": "genie",
-        "keywords": "djinn | genie | (non-human color)"
+        "keywords": "djinn | genie | (non-human color) | alladin"
     },
     {
         "no": 216,
         "codes": "1F9DE 200D 2640 FE0F",
         "char": "🧞‍♀️",
         "name": "woman genie",
-        "keywords": "djinn | woman genie"
+        "keywords": "djinn | woman genie | alladin"
     },
     {
         "no": 217,
         "codes": "1F9DE 200D 2642 FE0F",
         "char": "🧞‍♂️",
-        "name": "man genie",
-        "keywords": "djinn | man genie"
+        "name": "Geniemoji",
+        "keywords": "djinn | man genie | alladin | geniemoji"
     },
     {
         "no": 218,
