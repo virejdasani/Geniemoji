@@ -56,7 +56,6 @@ function createWindow() {
 
     // This is a global shortcut to activate Cadbury with hotkey(s)
     globalShortcut.register('Control+e', () => {
-        // console.log('Electron loves global shortcuts!')
         if (mainWindow.isVisible()) {
             mainWindow.hide()
         } else {
