@@ -61,5 +61,4 @@ function copy(text) {
 }
 
 // TODO
-// Try adding support for arrow keys if not possible, mention somewhere to let users know to use 'tab' to go from one emoji to next
-// Change the orange color that shows up when pressing tab on a button
+// Make esc hide geniemoji
