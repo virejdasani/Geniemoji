@@ -41,6 +41,12 @@
     margin: 2px;
 }
 
+#info {
+    color: #656565;
+    padding: 0;
+    margin: 0;
+}
+
 /* This is for the highlighted color when the input field is in focus */
 input[type=text]:focus {
     outline: none;
