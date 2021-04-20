@@ -41,7 +41,9 @@ function search() {
     document.getElementById('answer').innerHTML = answerEmojis
 
     // Recursively search every 2 seconds. This is so that if text is entered by means like pasting (ctrl/cmd + v), or backspace, it doesn't count as keydown so it doesn't search. This fixes that by searching every 2 seconds
-    setTimeout(search, 2000)
+    // setTimeout(search, 2000)
+    // Doing this messes up the use of Tab to navigate through the emojis
+
 } // Search function end
 
 // This is executed when an emoji button is pressed
