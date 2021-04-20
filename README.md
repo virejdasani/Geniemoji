@@ -23,7 +23,7 @@ It's purpose is to serve you with the most relevant emojis based on your command
 > Geniemoji lives in your status bar 👆
 
 ## Using the app
-- There will be an official release in a couple of days
-- Until then:
-- To use thea app, clone it or download it as a zip
-- Rum `npm install` followed by `npm start` to run Geniemoji!
+- Go to the releases tab and download the latest version for your operating system
+OR
+- clone the repo or download it as a zip
+- Rum `npm install` followed by `npm start` to run Geniemoji
