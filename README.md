@@ -20,3 +20,9 @@ It's purpose is to serve you with the most relevant emojis based on your command
 
 ![Geniemoij](https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-statusBar.png)                  
 > Geniemoji lives in your status bar 👆
+
+## Using the app
+- There will be an official release in a couple of days
+- Until then:
+- To use thea app, clone it or download it as a zip
+- Rum `npm install` followed by `npm start` to run Geniemoji!
