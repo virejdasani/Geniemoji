@@ -1,5 +1,5 @@
 // Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
-document.getElementById('commandInput').addEventListener('keydown', search)
+document.getElementById('commandInput').addEventListener('keyup', search)
 
 var searchCommand
 

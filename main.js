@@ -20,7 +20,7 @@ function createWindow() {
         show: false
     })
 
-    mainWindow.loadFile('index.html')
+    mainWindow.loadFile('public/index.html')
 
     if (app.dock) {
         app.dock.hide()
