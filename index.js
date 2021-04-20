@@ -16,7 +16,7 @@ function search() {
 
             // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
             answerEmojis += `
-                <button id="emojiColumn">
+                <button id="emojiButton">
                     ${item.char}
                     ${item.name}
                 </button>
@@ -25,7 +25,7 @@ function search() {
         }
     })
 
-    // If there are no matching emojis
+    // If there are no matching emojis, it returns undefined. To not display 'undefined', we do the following
     if (typeof (answerEmojis) !== 'string') {
         answerEmojis = `
             <h3 id="displayedEmojiName">No matching emojis found 😢</h3>
