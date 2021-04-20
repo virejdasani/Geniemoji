@@ -5,11 +5,18 @@ The Emoji Genie
 Geniemoji is an open source, desktop app built using Electron.                         
 It's purpose is to serve you with the most relevant emojis based on your command!
 
+## How does it work?
+- Geniemoji lives in your Menu Bar once the app is launched
+- The app doesn't show up in the dock or anywhere else
+- You can summon Geniemoji using the shortcut keys: <kbd>Control</kbd> + <kbd>e</kbd>
+- The shortcut keys are the same across all operating systems
+
+# This is Geniemoji 🧞‍♂️
 ![Geniemoij](https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-navigation.png)          
-> Geniemoji start page              
+> Geniemoji start page 👆              
 
 ![Geniemoij](https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-geniemoji.png)                  
-> Geniemoji emoji search                 
+> Geniemoji emoji search 👆                
 
 ![Geniemoij](https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-statusBar.png)                  
-> Geniemoji lives in your status bar 
+> Geniemoji lives in your status bar 👆
