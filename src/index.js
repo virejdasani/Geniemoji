@@ -58,8 +58,8 @@ function copy(text) {
     textarea.select();
     document.execCommand("copy");
     document.body.removeChild(textarea);
+    document.getElementById('answer').innerHTML = `Copied emoji to clipboard!`
 }
 
 // TODO
 // Make esc hide geniemoji
-// Add copied to clipboard indication
