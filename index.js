@@ -40,11 +40,14 @@ function search() {
     // Displays all the matching emojis in the answer html div
     document.getElementById('answer').innerHTML = answerEmojis
 
-    // Recursively search every 2 seconds. This is so that if text is entered by means like pasting (ctrl/cmd + v), or backspace, it doesn't count as keydown so it doesn't search. This fixes that by searching every 2 seconds
-    // setTimeout(search, 2000)
-    // Doing this messes up the use of Tab to navigate through the emojis
-
 } // Search function end
+
+// This is to prevent page reload when Enter is pressed in the emoji search bar
+document.getElementById('commandInput').addEventListener('keydown', (e) => {
+    if (e.code === 'Enter') {
+        e.preventDefault()
+    }
+})
 
 // This is executed when an emoji button is pressed
 function copy(text) {
