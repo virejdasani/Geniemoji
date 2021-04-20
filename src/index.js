@@ -65,6 +65,3 @@ function copy(text) {
         </div>
     `
 }
-
-// TODO
-// Make esc hide geniemoji
