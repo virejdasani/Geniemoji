@@ -62,3 +62,4 @@ function copy(text) {
 
 // TODO
 // Make esc hide geniemoji
+// Add copied to clipboard indication
