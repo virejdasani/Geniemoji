@@ -8,7 +8,7 @@ It's purpose is to serve you with the most relevant emojis based on your command
 ## How does it work?
 - Geniemoji lives in your Menu Bar once the app is launched
 - The app doesn't show up in the dock or anywhere else
-- You can summon Geniemoji using either the shortcut keys: <kbd>Control</kbd> + <kbd>e</kbd> or pressing its icon in the menu bar
+- You can summon Geniemoji using either the shortcut keys: <kbd>Control</kbd> + <kbd>e</kbd> or by pressing its icon in the menu bar
 - The shortcut keys are the same across all operating systems
 
 # This is Geniemoji 🧞‍♂️
