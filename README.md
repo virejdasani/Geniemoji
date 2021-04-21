@@ -19,7 +19,7 @@ It's purpose is to serve you with the most relevant emojis based on your command
 ![Geniemoij](https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-geniemoji.png)                  
 > Geniemoji emoji search 👆                
 
-![Geniemoij](https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-statusBar.png)                  
+![Geniemoij](https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-angryEmoji.png)                  
 > Geniemoji lives in your status bar 👆
 
 ## Using the app
