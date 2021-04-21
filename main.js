@@ -1,9 +1,13 @@
+// https://github.com/kevinsawicki/tray-example/
+
 const {
     app,
     BrowserWindow,
     ipcMain,
-    Tray
+    Tray,
+    globalShortcut
 } = require('electron')
+
 const path = require('path')
 
 const assetsDirectory = path.join(__dirname, 'assets')
@@ -74,6 +78,22 @@ const createWindow = () => {
     // Hide the window when it loses focus
     window.on('blur', () => {
         if (!window.webContents.isDevToolsOpened()) {
+            window.hide()
+        }
+    })
+
+    // This is a global shortcut to activate Geniemoji with hotkey(s)
+    globalShortcut.register('Control+e', () => {
+        if (window.isVisible()) {
+            window.hide()
+        } else {
+            window.show()
+        }
+    })
+
+    // This is to hide window when Esc is pressed
+    globalShortcut.register('Esc', () => {
+        if (window.isVisible()) {
             window.hide()
         }
     })
