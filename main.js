@@ -62,7 +62,7 @@ const createWindow = () => {
 
     // Hide the window when it loses focus
     window.on('blur', () => {
-            window.hide()
+        window.hide()
     })
 
     // This is a global shortcut to activate Geniemoji with hotkey(s)
@@ -74,12 +74,6 @@ const createWindow = () => {
         }
     })
 
-    // This is to hide window when Esc is pressed
-    globalShortcut.register('Esc', () => {
-        if (window.isVisible()) {
-            window.hide()
-        }
-    })
 }
 
 const toggleWindow = () => {
