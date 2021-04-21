@@ -45,7 +45,7 @@ const getWindowPosition = () => {
     const trayBounds = tray.getBounds()
 
     // Center window horizontally below the tray icon
-    const x = Math.round((windowBounds.width * 2) - 175)
+    const x = Math.round((windowBounds.width * 2) - 165)
 
     const y = Math.round(windowBounds.width - 100)
 
