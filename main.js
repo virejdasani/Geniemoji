@@ -94,3 +94,5 @@ const showWindow = () => {
     window.show()
     window.focus()
 }
+
+// TODO - change file names and change tray icon
