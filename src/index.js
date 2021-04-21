@@ -60,8 +60,9 @@ function copy(text) {
     document.body.removeChild(textarea);
     document.getElementById('answer').innerHTML = `
         <div id="info">
-        Copied emoji to clipboard!</br>
-        Press 'Esc' to close Geniemoji
+        Copied emoji to clipboard!</br></br>
+        Press 'Ctrl + e' to close this window</br></br>
+        Geniemoji is Developed by @VirejDasani
         </div>
     `
 }
