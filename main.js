@@ -3,7 +3,6 @@
 const {
     app,
     BrowserWindow,
-    ipcMain,
     Tray,
     globalShortcut
 } = require('electron')
@@ -14,9 +13,6 @@ const assetsDirectory = path.join(__dirname, 'assets')
 
 let tray = undefined
 let window = undefined
-
-// Don't show the app in the doc
-app.dock.hide()
 
 app.on('ready', () => {
     createTray()
@@ -73,6 +69,14 @@ const createWindow = () => {
             window.show()
         }
     })
+    if (process.platform !== 'win32') {
+        // Don't show the app in the dock for macOS
+        app.dock.hide()
+    } else {
+        // To hide the app in the dock for windows
+        window.setSkipTaskbar(true)
+    }
+
 
 }
 
