@@ -1,83 +1,132 @@
-// Modules to control application life and create native browser window
 const {
     app,
     BrowserWindow,
-    Tray,
-    globalShortcut
+    ipcMain,
+    Tray
 } = require('electron')
-
 const path = require('path')
 
-let tray
+const assetsDirectory = path.join(__dirname, 'assets')
 
-function createWindow() {
-    // Create the browser window.
-    const mainWindow = new BrowserWindow({
-        width: 350,
-        height: 240,
-        resizable: false,
-        frame: false,
-        show: false
-    })
+let tray = undefined
+let window = undefined
 
-    mainWindow.loadFile('public/index.html')
+// Don't show the app in the doc
+app.dock.hide()
 
-    if (app.dock) {
-        app.dock.hide()
-    }
-
-// To get different icons depending on the platform,first comment the new Tray line below, then do this:
-    // const iconName = process.platform === win32 ? 'windowsIcon.png' : 'macIcon.png'
-    // const iconPath = `assets/${iconName}`
-    // new Tray(iconPath)
-// Also, if the menubar is in dark mode, we need an inverted icon like this:
-    // if (process.platform === 'win32') return 'icon-light.ico'
-    // if (systemPreferences.isDarkMode()
-    // return 'icon-dark.png'
-    tray = new Tray('assets/TrayIcons/trayIconMac.png')
-
-    // tray onClick event
-    tray.on('click', () => {
-        // If the window is visible and the tray icon is clicked, it should become hidden and vice versa
-        if (mainWindow.isVisible()) {
-            mainWindow.hide()
-        } else {
-            mainWindow.show()
-        }
-    })
-
-    // This is for the tiny popup that shows up on hovering the icon
-    tray.setToolTip('Geniemoji')
-
-    // This is when the window is not in focus
-    mainWindow.on('blur', () => {
-        mainWindow.hide()
-    })
-
-    // This is a global shortcut to activate Geniemoji with hotkey(s)
-    globalShortcut.register('Control+e', () => {
-        if (mainWindow.isVisible()) {
-            mainWindow.hide()
-        } else {
-            mainWindow.show()
-        }
-    })
-
-    // This is to hide window when Esc is pressed
-    globalShortcut.register('Esc', () => {
-        if (mainWindow.isVisible()) {
-            mainWindow.hide()
-        }
-    })
-
-}
-
-
-// From boilerplate code
-app.whenReady().then(() => {
+app.on('ready', () => {
+    createTray()
     createWindow()
 })
 
-app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit()
+// Quit the app when the window is closed
+app.on('window-all-closed', () => {
+    app.quit()
+})
+
+const createTray = () => {
+    tray = new Tray(path.join(assetsDirectory, 'sunTemplate.png'))
+    tray.on('right-click', toggleWindow)
+    tray.on('double-click', toggleWindow)
+    tray.on('click', function (event) {
+        toggleWindow()
+
+        // Show devtools when command clicked
+        if (window.isVisible() && process.defaultApp && event.metaKey) {
+            window.openDevTools({
+                mode: 'detach'
+            })
+        }
+    })
+}
+
+const getWindowPosition = () => {
+    const windowBounds = window.getBounds()
+    const trayBounds = tray.getBounds()
+
+    // Center window horizontally below the tray icon
+    const x = Math.round((windowBounds.width * 2) - 175)
+
+    const y = Math.round(windowBounds.width - 100)
+
+    return {
+        x: x,
+        y: y
+    }
+}
+
+const createWindow = () => {
+    window = new BrowserWindow({
+        width: 350,
+        height: 240,
+        show: false,
+        frame: false,
+        fullscreenable: false,
+        resizable: false,
+        webPreferences: {
+            // Prevents renderer process code from not running when window is
+            // hidden
+            backgroundThrottling: false
+        }
+    })
+    window.loadURL(`file://${path.join(__dirname, 'public/index.html')}`)
+
+    // Hide the window when it loses focus
+    window.on('blur', () => {
+        if (!window.webContents.isDevToolsOpened()) {
+            window.hide()
+        }
+    })
+}
+
+const toggleWindow = () => {
+    if (window.isVisible()) {
+        window.hide()
+    } else {
+        showWindow()
+    }
+}
+
+const showWindow = () => {
+    const position = getWindowPosition()
+    window.setPosition(position.x, position.y, false)
+    window.show()
+    window.focus()
+}
+
+ipcMain.on('show-window', () => {
+    showWindow()
+})
+
+ipcMain.on('weather-updated', (event, weather) => {
+    // Show "feels like" temperature in tray
+    tray.setTitle(`${Math.round(weather.currently.apparentTemperature)}°`)
+
+    // Show summary and last refresh time as hover tooltip
+    const time = new Date(weather.currently.time).toLocaleTimeString()
+    tray.setToolTip(`${weather.currently.summary} at ${time}`)
+
+    // Update icon for different weather types
+    switch (weather.currently.icon) {
+        case 'cloudy':
+        case 'fog':
+        case 'partly-cloudy-day':
+        case 'partly-cloudy-night':
+            tray.setImage(path.join(assetsDirectory, 'cloudTemplate.png'))
+            break
+        case 'rain':
+        case 'sleet':
+        case 'snow':
+            tray.setImage(path.join(assetsDirectory, 'umbrellaTemplate.png'))
+            break
+        case 'clear-night':
+            tray.setImage(path.join(assetsDirectory, 'moonTemplate.png'))
+            break
+        case 'wind':
+            tray.setImage(path.join(assetsDirectory, 'flagTemplate.png'))
+            break
+        case 'clear-day':
+        default:
+            tray.setImage(path.join(assetsDirectory, 'sunTemplate.png'))
+    }
 })
