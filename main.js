@@ -106,7 +106,12 @@ const showWindow = () => {
 }
 
 const hideWindow = () => {
-    // Both of these are needed because they help restore focus back to the previous window
-    app.hide()
-    window.hide()
+    // This is required because app.hide() is not defined in windows
+    if (process.platform !== 'win32') {
+        // Both of these are needed because they help restore focus back to the previous window
+        app.hide()
+        window.hide()
+    } else {
+        window.hide()
+    }
 }
