@@ -67,9 +67,8 @@ function copy(text) {
     `
 }
 
-
-document.addEventListener("keydown", (event) => {
-    if (event.code === "ArrowDown") {
-
-    }
-})
+// document.addEventListener("keydown", (event) => {
+//     if (event.code === "ArrowDown") {
+//         // TODO - Press tab 
+//     }
+// })

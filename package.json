@@ -1,7 +1,7 @@
 {
-  "name": "emojenie",
-  "version": "1.0.0",
-  "description": "The Emoji Genie",
+  "name": "geniemoji",
+  "version": "1.0.1",
+  "description": "The Emoji Genie App",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
