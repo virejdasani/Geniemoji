@@ -110,6 +110,3 @@ const hideWindow = () => {
     app.hide()
     window.hide()
 }
-
-
-// TODO - change tray icon, Test on other os, arrow keys nav
