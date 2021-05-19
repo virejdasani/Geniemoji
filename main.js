@@ -43,11 +43,21 @@ const createWindow = () => {
         resizable: false,
         webPreferences: {
             // Prevents renderer process code from not running when window is
-            backgroundThrottling: false
+            backgroundThrottling: false,
+            nodeIntegration: true
         }
     })
+
+    // Load index.html
     window.loadURL(`file://${path.join(__dirname, 'public/index.html')}`)
 
+    // If 'esc' is pressed, hide the app window
+    window.webContents.on('before-input-event', (event, input) => {
+        if (input.key === "Escape") {
+            hideWindow()
+            // event.preventDefault()
+        }
+    })
     // Hide the window when it loses focus
     window.on('blur', () => {
         hideWindow()
@@ -90,4 +100,4 @@ const hideWindow = () => {
 }
 
 
-// TODO - change tray icon, Test on other os, esc to hide, arrow keys nav
+// TODO - change tray icon, Test on other os, arrow keys nav
