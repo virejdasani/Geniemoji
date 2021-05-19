@@ -57,29 +57,24 @@ const createWindow = () => {
 
     // Hide the window when it loses focus
     window.on('blur', () => {
-        // window.hide()
         hideWindow()
     })
 
     // This is a global shortcut to activate Geniemoji with hotkey(s)
     globalShortcut.register('Control+e', () => {
         if (window.isVisible()) {
-            // window.hide()
             hideWindow()
         } else {
-            // window.show()
             showWindow()
         }
     })
     if (process.platform !== 'win32') {
-        // Don't show the app in the dock for macOS
+        // Don't show the app in the dock for macOS and linux
         app.dock.hide()
     } else {
         // To hide the app in the dock for windows
         window.setSkipTaskbar(true)
     }
-
-
 }
 
 const toggleWindow = () => {
