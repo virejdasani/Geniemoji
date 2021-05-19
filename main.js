@@ -7,7 +7,7 @@ const {
 } = require('electron')
 
 // This is the npm package `open`, it is used here to open all links in an external browser
-const open = require('open');
+const open = require('open')
 
 const path = require('path')
 
@@ -64,7 +64,7 @@ const createWindow = () => {
         }
     })
 
-    // Open links in browser not the app window
+    // This opens all links with `target="_blank"` in external browser
     window.webContents.on('new-window', function (event, url) {
         event.preventDefault()
         open(url)
