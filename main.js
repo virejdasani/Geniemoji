@@ -30,13 +30,6 @@ const createTray = () => {
     tray.on('double-click', toggleWindow)
     tray.on('click', function (event) {
         toggleWindow()
-
-        // Show devtools when command clicked
-        if (window.isVisible() && process.defaultApp && event.metaKey) {
-            window.openDevTools({
-                mode: 'detach'
-            })
-        }
     })
 }
 
