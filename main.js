@@ -1,5 +1,3 @@
-// https://github.com/kevinsawicki/tray-example/
-
 const {
     app,
     BrowserWindow,
@@ -58,6 +56,7 @@ const createWindow = () => {
             // event.preventDefault()
         }
     })
+
     // Hide the window when it loses focus
     window.on('blur', () => {
         hideWindow()
@@ -98,6 +97,5 @@ const hideWindow = () => {
     app.hide()
     window.hide()
 }
-
 
 // TODO - change tray icon, Test on other os, arrow keys nav
