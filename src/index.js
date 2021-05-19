@@ -16,7 +16,7 @@ function search() {
 
             // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
             answerEmojis += `
-                <button type="button" onclick="copy('${item.char}')" id="emojiButton">
+                <button type="button" onclick="copy('${item.char}')" class="emojiButton">
                     ${item.char}
                     ${item.name}
                 </button>
@@ -66,3 +66,10 @@ function copy(text) {
         </div>
     `
 }
+
+
+document.addEventListener("keydown", (event) => {
+    if (event.code === "ArrowDown") {
+
+    }
+})

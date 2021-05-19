@@ -32,7 +32,7 @@
     overflow: hidden;
 }
 
-#emojiButton {
+.emojiButton {
     padding-top: 1px;
     padding-bottom: 1px;
     border: none;
