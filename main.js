@@ -6,6 +6,9 @@ const {
     Menu
 } = require('electron')
 
+// This is the npm package `open`, it is used here to open all links in an external browser
+const open = require('open');
+
 const path = require('path')
 
 const assetsDirectory = path.join(__dirname, 'assets')
@@ -13,8 +16,8 @@ const assetsDirectory = path.join(__dirname, 'assets')
 let tray = undefined
 let window = undefined
 
-// Hide the menu
-Menu.setApplicationMenu(null);
+// Hide the menu and dev tools
+// Menu.setApplicationMenu(null)
 
 app.on('ready', () => {
     createTray()
@@ -61,6 +64,12 @@ const createWindow = () => {
         }
     })
 
+    // Open links in browser not the app window
+    window.webContents.on('new-window', function (event, url) {
+        event.preventDefault()
+        open(url)
+    })
+
     // Hide the window when it loses focus
     window.on('blur', () => {
         hideWindow()
@@ -101,5 +110,6 @@ const hideWindow = () => {
     app.hide()
     window.hide()
 }
+
 
 // TODO - change tray icon, Test on other os, arrow keys nav

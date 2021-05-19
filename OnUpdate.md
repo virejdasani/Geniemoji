@@ -1,0 +1,4 @@
+- Go to `index.js`, search `app update` and change the app version in `data.latestVersion`
+- Go to `index.js`, in the `function copy()`, change the app version
+- Go to `main.js`, search hide menu and uncomment `Menu.setApplicationMenu(null)`
+- Go here: https://github.com/virejdasani/RemoteJSON/blob/main/Geniemoji/index.html and update the `updateAvailable` to `"yes"`, `latestVersion`, `updateText` and `updateURL` to their respective values

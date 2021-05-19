@@ -3,6 +3,26 @@ document.getElementById('commandInput').addEventListener('keyup', search)
 
 var searchCommand
 
+// For app update, if an update is available, the updateAvailable in the RemoteJSON repo will be updated to yes. That will result in the code below being executed
+fetch('https://virejdasani.github.io/RemoteJSON/Geniemoji/index.html')
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        // If update is available, and this version is not the latest one, the update div will no longer be empty. It will have the following HTML
+        if (data.updateAvailable == "yes" && data.latestVersion !== "1.0.1") {
+            document.getElementById("update").innerHTML = `
+                <div id="update">
+                    ${data.updateText}
+                    Download update <!-- (${data.latestVersion}) --> <a href="${data.updateURL}" target="_blank">here</a>
+                </div>
+            `
+        }
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+
 function search() {
     // Get the value of the search input
     searchCommand = document.getElementById("commandInput").value.toLowerCase()
@@ -60,13 +80,15 @@ function copy(text) {
     document.body.removeChild(textarea)
     document.getElementById('answer').innerHTML = `
         <div id="info">
-        Copied emoji to clipboard!</br></br>
-        Press Escape to close this window</br></br>
-        Geniemoji is Developed by @VirejDasani
+            Copied emoji to clipboard!</br></br>
+            Press Escape to close this window</br></br>
+            Geniemoji (1.0.1)</br>
+            Developed by <a href="https://virejdasani.github.io/virej/" target="_blank">@VirejDasani</a>
         </div>
     `
 }
 
+// TODO
 // document.addEventListener("keydown", (event) => {
 //     if (event.code === "ArrowDown") {
 //         // TODO - Press tab 
