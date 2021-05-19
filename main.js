@@ -2,7 +2,8 @@ const {
     app,
     BrowserWindow,
     Tray,
-    globalShortcut
+    globalShortcut,
+    Menu
 } = require('electron')
 
 const path = require('path')
@@ -11,6 +12,9 @@ const assetsDirectory = path.join(__dirname, 'assets')
 
 let tray = undefined
 let window = undefined
+
+// Hide the menu
+Menu.setApplicationMenu(null);
 
 app.on('ready', () => {
     createTray()
