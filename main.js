@@ -50,7 +50,6 @@ const createWindow = () => {
         resizable: false,
         webPreferences: {
             // Prevents renderer process code from not running when window is
-            // hidden
             backgroundThrottling: false
         }
     })
@@ -58,15 +57,18 @@ const createWindow = () => {
 
     // Hide the window when it loses focus
     window.on('blur', () => {
-        window.hide()
+        // window.hide()
+        hideWindow()
     })
 
     // This is a global shortcut to activate Geniemoji with hotkey(s)
     globalShortcut.register('Control+e', () => {
         if (window.isVisible()) {
-            window.hide()
+            // window.hide()
+            hideWindow()
         } else {
-            window.show()
+            // window.show()
+            showWindow()
         }
     })
     if (process.platform !== 'win32') {
@@ -82,7 +84,7 @@ const createWindow = () => {
 
 const toggleWindow = () => {
     if (window.isVisible()) {
-        window.hide()
+        hideWindow()
     } else {
         showWindow()
     }
@@ -90,7 +92,14 @@ const toggleWindow = () => {
 
 const showWindow = () => {
     window.show()
-    window.focus()
+    window.restore()
 }
 
-// TODO - change file names and change tray icon
+const hideWindow = () => {
+    // Both of these are needed because they help restore focus back to the previous window
+    app.hide()
+    window.hide()
+}
+
+
+// TODO - change tray icon, Test on other os, esc to hide, arrow keys nav
