@@ -90,7 +90,7 @@ const toggleWindow = () => {
 
 const showWindow = () => {
     window.show()
-    window.restore()
+    window.reload()
 }
 
 const hideWindow = () => {

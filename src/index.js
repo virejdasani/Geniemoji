@@ -61,7 +61,7 @@ function copy(text) {
     document.getElementById('answer').innerHTML = `
         <div id="info">
         Copied emoji to clipboard!</br></br>
-        Press 'Ctrl + e' to close this window</br></br>
+        Press Escape to close this window</br></br>
         Geniemoji is Developed by @VirejDasani
         </div>
     `
