@@ -112,6 +112,8 @@ const hideWindow = () => {
         app.hide()
         window.hide()
     } else {
+        // Both of these are needed because they help restore focus back to the previous window
+        window.minimize()
         window.hide()
     }
 }
