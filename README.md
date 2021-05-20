@@ -29,4 +29,4 @@ It's purpose is to serve you with the most relevant emojis based on your command
 - Go to the releases tab and download the latest version for your operating system
 OR
 - clone the repo or download it as a zip
-- Rum `npm install` followed by `npm start` to run Geniemoji
+- Run `npm install` followed by `npm start` to run Geniemoji
