@@ -1,3 +1,9 @@
+[![Github All Releases](https://img.shields.io/github/downloads/virejdasani/meetingassistant/total.svg)]()
+[![GitHub license](https://img.shields.io/github/license/virejdasani/meetingassistant)](https://github.com/virejdasani/meetingassistant/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/virejdasani/meetingassistant)](https://GitHub.com/virejdasani/meetingassistant/releases/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/virejdasani/meetingassistant/)
+
 # Geniemoji 🧞‍♂️
 The Emoji Genie
 
