@@ -83,11 +83,11 @@ const createWindow = () => {
             showWindow()
         }
     })
-    if (process.platform !== 'win32') {
-        // Don't show the app in the dock for macOS and linux
+    if (process.platform == 'darwin') {
+        // Don't show the app in the dock for macOS
         app.dock.hide()
     } else {
-        // To hide the app in the dock for windows
+        // To hide the app in the dock for windows and linux
         window.setSkipTaskbar(true)
     }
 }
@@ -106,8 +106,8 @@ const showWindow = () => {
 }
 
 const hideWindow = () => {
-    // This is required because app.hide() is not defined in windows
-    if (process.platform !== 'win32') {
+    // This is required because app.hide() is not defined in windows and linux
+    if (process.platform == 'darwin') {
         // Both of these are needed because they help restore focus back to the previous window
         app.hide()
         window.hide()
