@@ -14,12 +14,15 @@ It's purpose is to serve you with the most relevant emojis based on your command
 
 # This is Geniemoji 🧞‍♂️
 <img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-navigation.png">
+
 > Geniemoji start page 👆              
 
 <img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-geniemoji.png">
+
 > Geniemoji emoji search 👆                
 
 <img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-angryEmoji.png">
+
 > Geniemoji emoji search 👆      
 
 ## Using the app
