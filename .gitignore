@@ -3,6 +3,4 @@ node_modules
 
 # Builds
 builds/v1.0.0/*.zip
-builds/v1.0.1/*.app
 builds/v1.0.1/*.zip
-builds/v1.0.1/*.app
