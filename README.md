@@ -13,15 +13,15 @@ It's purpose is to serve you with the most relevant emojis based on your command
 - The shortcut keys are the same across all operating systems
 
 # This is Geniemoji 🧞‍♂️
-<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-navigation.png">
+<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-navigation.png" alt="Geniemoji Preview Image">
 
 > Geniemoji start page 👆              
 
-<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-geniemoji.png">
+<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-geniemoji.png" alt="Geniemoji Preview Image">
 
 > Geniemoji emoji search 👆                
 
-<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-angryEmoji.png">
+<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-angryEmoji.png" alt="Geniemoji Preview Image">
 
 > Geniemoji emoji search 👆      
 
