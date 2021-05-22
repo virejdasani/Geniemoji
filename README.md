@@ -1,3 +1,9 @@
+[![Github All Releases](https://img.shields.io/github/downloads/virejdasani/geniemoji/total.svg)]()
+[![GitHub license](https://img.shields.io/github/license/virejdasani/geniemoji)](https://github.com/virejdasani/geniemoji/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/virejdasani/geniemoji)](https://GitHub.com/virejdasani/geniemoji/releases/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/virejdasani/geniemoji/)
+
 # Geniemoji 🧞‍♂️
 The Emoji Genie
 
