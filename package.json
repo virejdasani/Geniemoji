@@ -1,6 +1,6 @@
 {
   "name": "geniemoji",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "The Emoji Genie App",
   "main": "main.js",
   "scripts": {

@@ -1,3 +1,5 @@
+var appVersion = "2.0.0"
+
 // Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
 document.getElementById('commandInput').addEventListener('keyup', search)
 
@@ -10,7 +12,7 @@ fetch('https://virejdasani.github.io/RemoteJSON/Geniemoji/index.html')
     })
     .then((data) => {
         // If update is available, and this version is not the latest one, the update div will no longer be empty. It will have the following HTML
-        if (data.updateAvailable == "yes" && data.latestVersion !== "1.0.1") {
+        if (data.updateAvailable == "yes" && data.latestVersion != appVersion) {
             document.getElementById("update").innerHTML = `
                 <div id="update">
                     ${data.updateText}
@@ -82,8 +84,8 @@ function copy(text) {
         <div id="info">
             Copied emoji to clipboard!</br></br>
             Press Escape to close this window</br></br>
-            Geniemoji (1.0.1)</br>
-            Developed by <a href="https://virejdasani.github.io/virej/" target="_blank">@VirejDasani</a>
+            <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> (${appVersion})</br>
+            Developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>
         </div>
     `
 }
