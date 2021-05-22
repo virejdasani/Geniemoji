@@ -19,6 +19,10 @@ It's purpose is to serve you with the most relevant emojis based on your command
 - The shortcut keys are the same across all operating systems
 
 # This is Geniemoji 🧞‍♂️
+<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-menuBarIcon.png" alt="Geniemoji Tray Icon">
+
+> Geniemoji lives in your menu bar 👆    
+
 <img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-navigation.png" alt="Geniemoji Preview Image">
 
 > Geniemoji start page 👆              
