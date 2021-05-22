@@ -42,4 +42,4 @@ OR
 - clone the repo or download it as a zip
 - Run `npm install` followed by `npm start` to run Geniemoji
 
-### Check out Geniemoji on YouTube [here](https://www.youtube.com/watch?v=0I18p8e1Z5Y)
+### Check out Geniemoji on YouTube [here](https://youtu.be/2k41mwqKN9A)
