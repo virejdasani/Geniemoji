@@ -1,3 +1,1 @@
-- Change tray icon
 - Add functionality to navigate with arrow keys
-- Test on Linux
