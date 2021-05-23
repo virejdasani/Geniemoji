@@ -9,9 +9,9 @@ The Emoji Genie
 
 ## What is Geniemoji?
 Geniemoji is an app that makes using emojis on desktop simpler than ever           
-It works on operating systems including Windows, MacOS and Linux!           
+It works on operating systems including Windows, MacOS, and Linux!           
 It is an open source, desktop app built using Electron                         
-It's purpose is to serve you with the most relevant emojis based on your command!
+Its purpose is to serve you with the most relevant emojis based on your command!
 
 ## How does it work?
 - Geniemoji lives in your Menu Bar once the app is launched
@@ -42,4 +42,4 @@ OR
 - clone the repo or download it as a zip
 - Run `npm install` followed by `npm start` to run Geniemoji
 
-### Check out Geniemoji on YouTube [here](https://www.youtube.com/watch?v=0I18p8e1Z5Y)
+### Check out Geniemoji on YouTube [here](https://youtu.be/2k41mwqKN9A)
