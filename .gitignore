@@ -1,5 +1,7 @@
 node_modules
+
 .DS_Store
+.vscode
 
 # Builds
 builds/v1.0.0/*.zip
