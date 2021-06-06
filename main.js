@@ -30,7 +30,7 @@ app.on('window-all-closed', () => {
 })
 
 const createTray = () => {
-    tray = new Tray(path.join(assetsDirectory, 'geniemojiLamp@2x.png'))
+    tray = new Tray(path.join(assetsDirectory, 'geniemojiLampTemplate@2x.png'))
     tray.on('right-click', toggleWindow)
     tray.on('double-click', toggleWindow)
     tray.on('click', function (event) {
@@ -102,16 +102,17 @@ const toggleWindow = () => {
 
 const showWindow = () => {
     window.show()
-    window.reload()
 }
 
 const hideWindow = () => {
     // This is required because app.hide() is not defined in windows and linux
     if (process.platform == 'darwin') {
+        window.reload()
         // Both of these are needed because they help restore focus back to the previous window
         app.hide()
         window.hide()
     } else {
+        window.reload()
         // Both of these are needed because they help restore focus back to the previous window
         window.minimize()
         window.hide()
