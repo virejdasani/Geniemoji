@@ -4,6 +4,8 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/virejdasani/geniemoji/)
 
+<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/geniemojiBanner.png" alt="Geniemoji - The emoji genie">
+
 # Geniemoji 🧞‍♂️
 The Emoji Genie
 
