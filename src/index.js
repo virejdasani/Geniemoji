@@ -85,7 +85,7 @@ function copy(text) {
             Copied emoji to clipboard!</br></br>
             Press Escape to close this window</br></br>
             <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> (${appVersion})</br>
-            Maintained by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>
+            Developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>
         </div>
     `
 }
