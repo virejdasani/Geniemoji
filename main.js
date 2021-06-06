@@ -107,11 +107,13 @@ const showWindow = () => {
 const hideWindow = () => {
     // This is required because app.hide() is not defined in windows and linux
     if (process.platform == 'darwin') {
+        // This is so that when reopening the window, the previous state is not remembered
         window.reload()
         // Both of these are needed because they help restore focus back to the previous window
         app.hide()
         window.hide()
     } else {
+        // This is so that when reopening the window, the previous state is not remembered
         window.reload()
         // Both of these are needed because they help restore focus back to the previous window
         window.minimize()
