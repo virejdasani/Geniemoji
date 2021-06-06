@@ -1,13 +1,13 @@
 {
   "name": "geniemoji",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "The Emoji Genie App",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack-darwin-x64": "electron-packager . 'Geniemoji' --platform=darwin --arch=x64 --icon=assets/AppIcons/icon.icns --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid",
-    "pack-win32-x64": "electron-packager . 'Geniemoji' --platform=win32 --arch=x64 --icon=assets/AppIcons/icon.ico --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid",
-    "pack-linux-x64": "electron-packager . 'Geniemoji' --platform=linux --arch=x64 --icon=assets/AppIcons/icon.png --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid"
+    "pack-darwin-x64": "electron-packager . Geniemoji --platform=darwin --arch=x64 --icon=assets/AppIcons/icon.icns --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid --ignore=assets/oldIcons",
+    "pack-win32-x64": "electron-packager . Geniemoji --platform=win32 --arch=x64 --icon=assets/AppIcons/icon.ico --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid --ignore=assets/oldIcons",
+    "pack-linux-x64": "electron-packager . Geniemoji --platform=linux --arch=x64 --icon=assets/AppIcons/icon.png --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid --ignore=assets/oldIcons"
   },
   "repository": {
     "type": "git",
