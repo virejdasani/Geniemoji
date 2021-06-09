@@ -1,3 +1,4 @@
 - In `src/index.js`, change `appVersion` in the first line
 - Go to `main.js`, search hide menu and uncomment `Menu.setApplicationMenu(null)`
 - Go here: https://github.com/virejdasani/RemoteJSON/blob/main/Geniemoji/index.html and update the `updateAvailable` to `"yes"`, `latestVersion`, `updateText` and `updateURL` to their respective values
+- Update version number in package.json, then delete package-lock.json and node modules, then reinstall them
