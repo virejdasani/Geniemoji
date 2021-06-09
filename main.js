@@ -46,12 +46,15 @@ const createWindow = () => {
         frame: false,
         fullscreenable: false,
         resizable: false,
+        alwaysOnTop: true,
         webPreferences: {
-            // Prevents renderer process code from not running when window is
             backgroundThrottling: false,
             nodeIntegration: true
         }
     })
+
+    // This is so that Geniemoji shows up on all desktops/workspaces
+    window.setVisibleOnAllWorkspaces(true)
 
     // Load index.html
     window.loadURL(`file://${path.join(__dirname, 'public/index.html')}`)

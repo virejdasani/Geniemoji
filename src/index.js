@@ -23,7 +23,7 @@ fetch('https://virejdasani.github.io/RemoteJSON/Geniemoji/index.html')
         }
     })
     .catch((err) => {
-        console.log(err)
+        // console.log(err)
     })
 
 function search() {
