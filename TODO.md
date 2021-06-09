@@ -1,0 +1,2 @@
+- Make app function on all desktops and above fullscreen apps in MacOS
+- Change the tray icon (colors)
