@@ -1,4 +1,4 @@
-var appVersion = "3.0.0"
+var appVersion = "4.0.0"
 
 // Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
 document.getElementById('commandInput').addEventListener('keyup', search)
