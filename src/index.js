@@ -1,5 +1,7 @@
 var appVersion = "4.0.0"
 
+const electron = window.require('electron');
+
 // Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
 document.getElementById('commandInput').addEventListener('keyup', search)
 
@@ -39,7 +41,7 @@ function search() {
             currentEmojiLength = i
             // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
             answerEmojis += `
-                <button type="button" onclick="copy('${item.char}')" class="emojiButton" tabindex="${i + 2}">
+                <button type="button" onclick="typeEmoji('${item.char}')" class="emojiButton" tabindex="${i + 2}">
                     ${item.char}
                     ${item.name}
                 </button>
@@ -72,22 +74,8 @@ document.getElementById('commandInput').addEventListener('keydown', (e) => {
 })
 
 // This is executed when an emoji button is pressed
-function copy(text) {
-    // To copy, a text area is created, the emojiChar is added to the text area. This is then selected and copied. After it is copied, the text area is deleted
-    var textarea = document.createElement("textarea")
-    textarea.value = text
-    document.body.appendChild(textarea)
-    textarea.select()
-    document.execCommand("copy")
-    document.body.removeChild(textarea)
-    document.getElementById('answer').innerHTML = `
-        <div id="info">
-            Copied emoji to clipboard!</br></br>
-            Press Escape to close this window</br></br>
-            <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> (${appVersion})</br>
-            Developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>
-        </div>
-    `
+function typeEmoji(text) {
+    electron.ipcRenderer.send('typeEmoji', text);
 }
 
 // For arrow key navigation
