@@ -1,2 +1,2 @@
-- Make it so that emoji is not copied, instead, it is directly pasted (without copying the emoji)
+- Change scrollbar color
 - Make emoji search more accurate (get a better JSON file)
