@@ -45,3 +45,6 @@ OR
 - Run `npm install` followed by `npm start` to run Geniemoji
 
 ### Check out Geniemoji on YouTube [here](https://youtu.be/2k41mwqKN9A)
+
+## Publication(s)
+- [Softpedia article on Geniemoji](https://www.softpedia.com/get/Internet/Chat/Other-Chat-Tools/Geniemoji.shtml)
