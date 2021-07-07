@@ -28,7 +28,6 @@
     "homepage": "https://github.com/virejdasani/Emojenie#readme",
     "dependencies": {
         "electron": "^12.0.4",
-        "open": "^8.0.9",
-        "robotjs": "^0.6.0"
+        "open": "^8.0.9"
     }
 }
