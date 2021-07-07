@@ -3,10 +3,8 @@ const {
     BrowserWindow,
     Tray,
     globalShortcut,
-    Menu,
-    ipcMain
+    Menu
 } = require('electron')
-const robot = require('robotjs');
 
 // This is the npm package `open`, it is used here to open all links in an external browser
 const open = require('open')
@@ -51,8 +49,7 @@ const createWindow = () => {
         alwaysOnTop: true,
         webPreferences: {
             backgroundThrottling: false,
-            nodeIntegration: true,
-            contextIsolation: false
+            nodeIntegration: true
         }
     })
 
@@ -97,12 +94,6 @@ const createWindow = () => {
         window.setSkipTaskbar(true)
     }
 }
-
-// When we get a signal to type an emoji, use RobotJS to type it out
-ipcMain.on('typeEmoji', (_event, arg) => {
-    hideWindow();
-    robot.typeString(arg);
-});
 
 const toggleWindow = () => {
     if (window.isVisible()) {

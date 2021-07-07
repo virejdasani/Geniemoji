@@ -1,7 +1,5 @@
 var appVersion = "4.0.0"
 
-const electron = window.require('electron');
-
 // Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
 document.getElementById('commandInput').addEventListener('keyup', search)
 
@@ -41,13 +39,13 @@ function search() {
             currentEmojiLength = i
             // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
             answerEmojis += `
-                <button type="button" onclick="typeEmoji(event, '${item.char}')" class="emojiButton" tabindex="${i + 2}">
+                <button type="button" onclick="copy('${item.char}')" class="emojiButton" tabindex="${i + 2}">
                     ${item.char}
                     ${item.name}
                 </button>
                 </br>
             ` // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
-        })
+    })
 
     // If there are no matching emojis, it returns undefined. To not display 'undefined', we do the following
     if (typeof (answerEmojis) !== 'string') {
@@ -74,17 +72,6 @@ document.getElementById('commandInput').addEventListener('keydown', (e) => {
 })
 
 // This is executed when an emoji button is pressed
-function typeEmoji(event, text) {
-    if (event.shiftKey) {
-        // User held down Shift key while selecting this emoji, let's copy it
-        copy(text);
-    } else {
-        // User selected emoji with no Shift key, type out selected emoji
-        electron.ipcRenderer.send('typeEmoji', text)
-    }
-}
-
-// Function to copy text to clipboard
 function copy(text) {
     // To copy, a text area is created, the emojiChar is added to the text area. This is then selected and copied. After it is copied, the text area is deleted
     var textarea = document.createElement("textarea")
@@ -115,7 +102,7 @@ document.addEventListener("keydown", (event) => {
         // circle through emojis
         // ArrowUp and focus on input field? -> select last emoji
         if (tabIndex < 1) {
-            tabIndex = currentEmojiLength + 2 // '+2': tabIndex starts with 1, 1 = input
+            tabIndex = currentEmojiLength + 2   // '+2': tabIndex starts with 1, 1 = input
         }
         // ArrowDown and focus on last emoji? -> select input field
         if (tabIndex > currentEmojiLength + 2) {
