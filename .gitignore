@@ -1,11 +1,10 @@
-node_modules
+**/.DS_Store
 
-.DS_Store
-.vscode
+app/macos/node_modules
+app/windowsNlinux/node_modules
 
-# Builds
-builds/v1.0.0/*.zip
-builds/v1.0.1/*.zip
-builds/v2.0.0/*.zip
-builds/v3.0.0/*.zip
-builds/v4.0.0/*.zip
+app/macos/.vscode
+app/windowsNlinux/node_modules
+
+builds/**/*.zip
+
