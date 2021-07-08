@@ -1,2 +1,0 @@
-- Change scrollbar color
-- Make emoji search more accurate (get a better JSON file)
