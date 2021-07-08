@@ -1,60 +1,89 @@
 * {
-    background-color: #171717;
-    color: white;
+  background-color: #171717;
+  color: white;
 }
 
 .app {
-    text-align: center;
-    margin-top: 6%;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding: 10px;
+  text-align: center;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding: 10px;
 }
 
 .button {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    display: inline-block;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  display: inline-block;
 }
 
 #commandInput {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    text-align: left;
-    max-width: 92%;
-    border-radius: 15px;
+  margin-top: 20px;
+  margin-bottom: 16px;
+  text-align: left;
+  max-width: 92%;
+  border-radius: 15px;
+  background-color: #313131;
+  color: white;
 }
 
-#answer {
-    margin-top: 2%;
-    font-size: 16px;
-    overflow: hidden;
-}
-
-.emojiButton {
-    padding-top: 1px;
-    padding-bottom: 1px;
-    border: none;
-    border-radius: 4px;
-    padding: 3px;
-    margin: 2px;
-}
-
-#info {
-    color: #868686;
-    padding: 0;
-    margin: 0;
+/* This it the input field when it does not have focus */
+input[type=text] {
+  outline: none;
+  box-shadow: none;
+  border: none;
 }
 
 /* This is for the highlighted color when the input field is in focus */
 input[type=text]:focus {
-    outline: none;
-    box-shadow: 0 0 0 1px rgb(0, 119, 255);
+  outline: none;
+  box-shadow: none;
+  border: solid 1px rgb(125, 125, 125);
+}
+
+#answer {
+  margin-top: 2%;
+  font-size: 16px;
+  overflow: hidden;
+}
+
+.emojiButton {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  border: none;
+  border-radius: 4px;
+  padding: 3px;
+  margin: 2px;
+}
+
+#info {
+  color: #868686;
+  padding: 0;
+  margin: 0;
+}
+
+#credit {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  font-size: 10px;
+  color: #727272;
 }
 
 /* This is for the highlighted color when the emoji buttons are in focus */
 button[type=button]:focus {
-    outline: none;
-    background-color: #656565;
+  outline: none;
+  background-color: #656565;
+}
+
+::-webkit-scrollbar {
+  background-color: #222222;
+  width: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #3f3f3f;
+  border-radius: 12px;
+  background-clip: content-box;
+  min-height: 26px;
 }
