@@ -6,6 +6,7 @@ const {
   Menu,
   ipcMain,
 } = require("electron");
+
 const robot = require("robotjs");
 
 // This is the npm package `open`, it is used here to open all links in an external browser

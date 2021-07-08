@@ -23,9 +23,22 @@
   text-align: left;
   max-width: 92%;
   border-radius: 15px;
-  background-color: #383838;
+  background-color: #313131;
   color: white;
+}
 
+/* This it the input field when it does not have focus */
+input[type=text] {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* This is for the highlighted color when the input field is in focus */
+input[type=text]:focus {
+  outline: none;
+  box-shadow: none;
+  border: solid 1px rgb(125, 125, 125);
 }
 
 #answer {
@@ -55,19 +68,6 @@
   bottom: 4px;
   font-size: 10px;
   color: #727272;
-}
-
-input[type=text] {
-  outline: none;
-  box-shadow: none;
-  border-color: rgb(68, 68, 68);
-}
-
-/* This is for the highlighted color when the input field is in focus */
-input[type=text]:focus {
-  outline: none;
-  box-shadow: none;
-  border-color: rgb(163, 163, 163);
 }
 
 /* This is for the highlighted color when the emoji buttons are in focus */
