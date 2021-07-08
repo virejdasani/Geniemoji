@@ -11,7 +11,7 @@ let tray = undefined;
 let window = undefined;
 
 // Hide the menu and dev tools
-// Menu.setApplicationMenu(null)
+Menu.setApplicationMenu(null)
 
 app.on("ready", () => {
   createTray();
