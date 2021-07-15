@@ -35,9 +35,9 @@ function search() {
   let answerEmojis;
 
   // For each emoji in the emojis.js file, this will search
-  // through emoji.keywords (from emojis.js) if it contains the word from the user input
+  // through emoji.keywords and emoji.name (from emojis.js) if it contains the word from the user input
   emojis
-    .filter((item) => item.keywords.includes(searchCommand))
+    .filter((item) => item.keywords.includes(searchCommand) || item.name.toLowerCase().includes(searchCommand))
     .forEach((item, i) => {
       currentEmojiLength = i;
       // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
