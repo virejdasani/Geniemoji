@@ -74,6 +74,9 @@ function search() {
 document.getElementById("commandInput").addEventListener("keydown", (e) => {
   if (e.code === "Enter") {
     e.preventDefault();
+
+    // User has clicked enter, let's autoclick the first item
+    document.querySelector('[tabindex="2"]').click();
   }
 });
 
