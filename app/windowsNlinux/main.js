@@ -107,7 +107,7 @@ ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
     .sort((a, b) => {
       if (lruMap.has(a.char) && !lruMap.has(b.char)) {
         // A is in recently used and B is not
-      return -1;
+        return -1;
       } else if (!lruMap.has(a.char) && lruMap.has(b.char)) {
         // B is in recently used and A is not
         return 1;
