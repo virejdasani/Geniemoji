@@ -6,6 +6,7 @@ const {
   Menu,
   ipcMain,
 } = require("electron");
+const { LRUMap } = require("lru_map");
 
 const robot = require("robotjs");
 
@@ -16,8 +17,14 @@ const path = require("path");
 
 const assetsDirectory = path.join(__dirname, "assets");
 
+// JSON list of emojis
+const emojis = require("./src/emojis");
+
 let tray = undefined;
 let window = undefined;
+
+// Let's preset our LRU Map that we'll use to keep track of recent uses
+let lruMap = new LRUMap(10);
 
 // Hide the menu and dev tools (for production build)
 Menu.setApplicationMenu(null);
@@ -103,6 +110,36 @@ const createWindow = () => {
 ipcMain.on("typeEmoji", (_event, arg) => {
   hideWindow();
   robot.typeString(arg);
+});
+
+// Return filtered and sorted emojis based on a search query
+ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
+  const recents = Array.from(lruMap.keys());
+
+  // For each emoji in the emojis.js file, this will search
+  // through emoji.keywords and emoji.name (from emojis.js) if it contains the word from the user input
+  return emojis
+    .filter((item) => item.keywords.includes(arg) || item.name.toLowerCase().includes(arg))
+    .sort((a, b) => {
+      if (lruMap.has(a.char) && !lruMap.has(b.char)) {
+        // A is in recently used and B is not
+      return -1;
+      } else if (!lruMap.has(a.char) && lruMap.has(b.char)) {
+        // B is in recently used and A is not
+        return 1;
+      } else if (!lruMap.has(a.char) && !lruMap.has(b.char)) {
+        // Neither A nor B is in recently used
+        return a.no - b.no;
+      } else {
+        // Both A and B are in recently used
+        return recents.indexOf(b.char) - recents.indexOf(a.char);
+      }
+    })
+});
+
+// When we get a signal to select an emoji, update our LRU Map
+ipcMain.on("selectEmoji", (_event, arg) => {
+  lruMap.set(arg, "");
 });
 
 const toggleWindow = () => {

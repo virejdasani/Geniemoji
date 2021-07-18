@@ -26,6 +26,7 @@
   "homepage": "https://github.com/virejdasani/Geniemoji#readme",
   "dependencies": {
     "electron": "^12.0.4",
+    "lru_map": "^0.4.1",
     "open": "^8.0.9",
     "robotjs": "^0.6.0"
   },
