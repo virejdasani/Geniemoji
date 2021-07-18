@@ -63,7 +63,7 @@ const createWindow = () => {
       contextIsolation: false,
     },
   });
-window.webContents.openDevTools();
+
   // This is so that Geniemoji shows up on all desktops/workspaces
   window.setVisibleOnAllWorkspaces(true);
 
