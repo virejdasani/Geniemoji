@@ -1,6 +1,10 @@
 const { app, BrowserWindow, Tray, globalShortcut, Menu, ipcMain } = require("electron");
 const { LRUMap } = require("lru_map");
 
+// Create store to save user's recents
+const Store = require('electron-store');
+const store = new Store();
+
 // This is the npm package `open`, it is used here to open all links in an external browser
 const open = require("open");
 
@@ -14,8 +18,15 @@ const emojis = require("./src/emojis");
 let tray = undefined;
 let window = undefined;
 
-// Let's preset our LRU Map that we'll use to keep track of recent uses
-let lruMap = new LRUMap(10);
+// Let's fetch our previous LRU Map, or set it
+let lruMap;
+if (store.has("lruMap")) {
+  lruMap = new LRUMap(10, store.get("lruMap").map(it => {
+    return [it.key, it.value];
+  }));
+} else {
+  lruMap = new LRUMap(10);
+}
 
 // Hide the menu and dev tools
 Menu.setApplicationMenu(null)
@@ -125,6 +136,9 @@ ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
 // When we get a signal to select an emoji, update our LRU Map
 ipcMain.on("selectEmoji", (_event, arg) => {
   lruMap.set(arg, "");
+
+  // Save our current lruMap's JSON representation to the store
+  store.set("lruMap", lruMap.toJSON());
 });
 
 const toggleWindow = () => {
