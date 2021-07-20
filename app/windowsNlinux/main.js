@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, globalShortcut, Menu } = require("electron");
+const { app, BrowserWindow, Tray, globalShortcut, Menu, ipcMain } = require("electron");
 const { LRUMap } = require("lru_map");
 
 // This is the npm package `open`, it is used here to open all links in an external browser
@@ -51,6 +51,7 @@ const createWindow = () => {
     webPreferences: {
       backgroundThrottling: false,
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
