@@ -55,7 +55,7 @@ async function search() {
             <h3 id="displayedEmojiName">No matching emojis found 😢</h3>
             <div id="credit">
               <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is
-              developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>
+              developed by <a href="https://virejdasani.github.io/" target="_blank">Virej Dasani</a>
             </div>
         `;
   }
@@ -109,7 +109,7 @@ function copy(text) {
             Press Escape to close this window</br></br>
             <div id="credit">
             <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is
-            developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>
+            developed by <a href="https://virejdasani.github.io/" target="_blank">Virej Dasani</a>
           </div>
         </div>
     `;
