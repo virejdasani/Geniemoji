@@ -28,17 +28,14 @@ fetch("https://virejdasani.github.io/RemoteJSON/Geniemoji/index.html")
     // console.log(err)
   });
 
-function search() {
+async function search() {
   // Get the value of the search input
   searchCommand = document.getElementById("commandInput").value.toLowerCase();
 
   let answerEmojis;
 
-  // For each emoji in the emojis.js file, this will search
-  // through emoji.keywords (from emojis.js) if it contains the word from the user input
-  emojis
-    .filter((item) => item.keywords.includes(searchCommand))
-    .forEach((item, i) => {
+  const emojis = await electron.ipcRenderer.invoke("getEmojisForSearchString", searchCommand);
+  emojis.forEach((item, i) => {
       currentEmojiLength = i;
       // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
       answerEmojis += `
@@ -76,11 +73,17 @@ function search() {
 document.getElementById("commandInput").addEventListener("keydown", (e) => {
   if (e.code === "Enter") {
     e.preventDefault();
+
+    // User has clicked enter, let's autoclick the first item
+    document.querySelector('[tabindex="2"]').click();
   }
 });
 
 // This is executed when an emoji button is pressed
 function typeEmoji(event, text) {
+  // Register recent use of emoji
+  electron.ipcRenderer.send("selectEmoji", text);
+
   if (event.shiftKey) {
     // User held down Shift key while selecting this emoji, let's copy it
     copy(text);

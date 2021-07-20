@@ -1,5 +1,7 @@
 var appVersion = "5.0.0";
 
+const electron = window.require("electron");
+
 // Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
 document.getElementById("commandInput").addEventListener("keyup", search);
 
@@ -26,17 +28,14 @@ fetch("https://virejdasani.github.io/RemoteJSON/Geniemoji/index.html")
     // console.log(err)
   });
 
-function search() {
+async function search() {
   // Get the value of the search input
   searchCommand = document.getElementById("commandInput").value.toLowerCase();
 
   let answerEmojis;
 
-  // For each emoji in the emojis.js file, this will search
-  // through emoji.keywords (from emojis.js) if it contains the word from the user input
-  emojis
-    .filter((item) => item.keywords.includes(searchCommand))
-    .forEach((item, i) => {
+  const emojis = await electron.ipcRenderer.invoke("getEmojisForSearchString", searchCommand);
+  emojis.forEach((item, i) => {
       currentEmojiLength = i;
       // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
       answerEmojis += `
@@ -74,11 +73,17 @@ function search() {
 document.getElementById("commandInput").addEventListener("keydown", (e) => {
   if (e.code === "Enter") {
     e.preventDefault();
+
+    // User has clicked enter, let's autoclick the first item
+    document.querySelector('[tabindex="2"]').click();
   }
 });
 
 // This is executed when an emoji button is pressed
 function copy(text) {
+  // Register recent use of emoji
+  electron.ipcRenderer.send("selectEmoji", text);
+
   // To copy, a text area is created, the emojiChar is added to the text area. This is then selected and copied. After it is copied, the text area is deleted
   var textarea = document.createElement("textarea");
   textarea.value = text;
