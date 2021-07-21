@@ -1,4 +1,4 @@
-var appVersion = "5.0.0";
+const appVersion = "5.0.0";
 
 const electron = window.require("electron");
 
@@ -8,26 +8,7 @@ document.getElementById("commandInput").addEventListener("keyup", search);
 var searchCommand;
 let currentEmojiLength = 0;
 
-// For app update, if an update is available, the updateAvailable in the RemoteJSON repo will be updated to yes. That will result in the code below being executed
-fetch("https://virejdasani.github.io/RemoteJSON/Geniemoji/index.html")
-  .then((response) => {
-    return response.json();
-  })
-  .then((data) => {
-    // If update is available, and this version is not the latest one, the update div will no longer be empty. It will have the following HTML
-    if (data.updateAvailable == "yes" && data.latestVersion != appVersion) {
-      document.getElementById("update").innerHTML = `
-                <div id="update">
-                    ${data.updateText}
-                    Download update <!-- (${data.latestVersion}) --> <a href="${data.updateURL}" target="_blank">here</a>
-                </div>
-            `;
-    }
-  })
-  .catch((err) => {
-    // console.log(err)
-  });
-
+// To search the emoji that is being inputted
 async function search() {
   // Get the value of the search input
   searchCommand = document.getElementById("commandInput").value.toLowerCase();
@@ -42,25 +23,25 @@ async function search() {
     currentEmojiLength = i;
     // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
     answerEmojis += `
-                <button type="button" onclick="typeEmoji(event, '${
-                  item.char
-                }')" class="emojiButton" tabindex="${i + 2}">
-                    ${item.char}
-                    ${item.name}
-                </button>
-                </br>
-            `; // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
+        <button type="button" onclick="typeEmoji(event, '${
+          item.char
+        }')" class="emojiButton" tabindex="${i + 2}">
+            ${item.char}
+            ${item.name}
+        </button>
+        </br>
+    `; // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
   });
 
   // If there are no matching emojis, it returns undefined. To not display 'undefined', we do the following
   if (typeof answerEmojis !== "string") {
     answerEmojis = `
-            <h3 id="displayedEmojiName">No matching emojis found 😢</h3>
-            <div id="credit">
-              <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is
-              developed by <a href="https://virejdasani.github.io/" target="_blank">Virej Dasani</a>
-            </div>
-        `;
+        <h3 id="displayedEmojiName">No matching emojis found 😢</h3>
+        <div id="credit">
+          <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is
+          developed by <a href="https://virejdasani.github.io/" target="_blank">Virej Dasani</a>
+        </div>
+    `;
   }
 
   // answerEmojis returns 'undefined' before all the emojis. This is probably a zero index error but this works for now. Whenever this happens, the code below removes 'undefined' from the answer string
@@ -106,14 +87,14 @@ function copy(text) {
   document.execCommand("copy");
   document.body.removeChild(textarea);
   document.getElementById("answer").innerHTML = `
-        <div id="info">
-          </br>
-            Copied emoji to clipboard!</br>
-            Press Escape to close this window</br></br>
-            <div id="credit">
-            <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is
-            developed by <a href="https://virejdasani.github.io/" target="_blank">Virej Dasani</a>
-          </div>
+      <div id="info">
+        </br>
+          Copied emoji to clipboard!</br>
+          Press Escape to close this window</br></br>
+          <div id="credit">
+          <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is
+          developed by <a href="https://virejdasani.github.io/" target="_blank">Virej Dasani</a>
         </div>
-    `;
+      </div>
+  `;
 }
