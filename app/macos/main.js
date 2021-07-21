@@ -9,7 +9,7 @@ const {
 const { LRUMap } = require("lru_map");
 
 // Create store to save user's recents
-const Store = require('electron-store');
+const Store = require("electron-store");
 const store = new Store();
 
 const robot = require("robotjs");
@@ -27,18 +27,21 @@ const emojis = require("./src/emojis");
 let tray = undefined;
 let window = undefined;
 
+// Hide the menu and dev tools (for production build)
+// Menu.setApplicationMenu(null);
+
 // Let's fetch our previous LRU Map, or set it
 let lruMap;
 if (store.has("lruMap")) {
-  lruMap = new LRUMap(10, store.get("lruMap").map(it => {
-    return [it.key, it.value];
-  }));
+  lruMap = new LRUMap(
+    10,
+    store.get("lruMap").map((it) => {
+      return [it.key, it.value];
+    })
+  );
 } else {
   lruMap = new LRUMap(10);
 }
-
-// Hide the menu and dev tools (for production build)
-Menu.setApplicationMenu(null);
 
 app.on("ready", () => {
   createTray();
@@ -130,7 +133,10 @@ ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
   // For each emoji in the emojis.js file, this will search
   // through emoji.keywords and emoji.name (from emojis.js) if it contains the word from the user input
   return emojis
-    .filter((item) => item.keywords.includes(arg) || item.name.toLowerCase().includes(arg))
+    .filter(
+      (item) =>
+        item.keywords.includes(arg) || item.name.toLowerCase().includes(arg)
+    )
     .sort((a, b) => {
       if (lruMap.has(a.char) && !lruMap.has(b.char)) {
         // A is in recently used and B is not
@@ -145,7 +151,7 @@ ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
         // Both A and B are in recently used
         return recents.indexOf(b.char) - recents.indexOf(a.char);
       }
-    })
+    });
 });
 
 // When we get a signal to select an emoji, update our LRU Map

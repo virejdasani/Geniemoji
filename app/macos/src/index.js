@@ -34,11 +34,14 @@ async function search() {
 
   let answerEmojis;
 
-  const emojis = await electron.ipcRenderer.invoke("getEmojisForSearchString", searchCommand);
+  const emojis = await electron.ipcRenderer.invoke(
+    "getEmojisForSearchString",
+    searchCommand
+  );
   emojis.forEach((item, i) => {
-      currentEmojiLength = i;
-      // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
-      answerEmojis += `
+    currentEmojiLength = i;
+    // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
+    answerEmojis += `
                 <button type="button" onclick="typeEmoji(event, '${
                   item.char
                 }')" class="emojiButton" tabindex="${i + 2}">
@@ -47,7 +50,7 @@ async function search() {
                 </button>
                 </br>
             `; // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
-    });
+  });
 
   // If there are no matching emojis, it returns undefined. To not display 'undefined', we do the following
   if (typeof answerEmojis !== "string") {
@@ -114,28 +117,3 @@ function copy(text) {
         </div>
     `;
 }
-
-// For arrow key navigation
-document.addEventListener("keydown", (event) => {
-  // Key is ArrowUp or ArrowDown?
-  if (event.code === "ArrowDown" || event.code === "ArrowUp") {
-    event.preventDefault();
-    // get tabIndex of current element
-    let tabIndex = event.target.tabIndex;
-    // increment or decrement tabindex depending on Key (ArrowUp -> previous Element, ArrowDown -> next lement)
-    tabIndex += event.code === "ArrowUp" ? -1 : 1;
-    // circle through emojis
-    // ArrowUp and focus on input field? -> select last emoji
-    if (tabIndex < 1) {
-      tabIndex = currentEmojiLength + 2; // '+2': tabIndex starts with 1, 1 = input
-    }
-    // ArrowDown and focus on last emoji? -> select input field
-    if (tabIndex > currentEmojiLength + 2) {
-      tabIndex = 1;
-    }
-    // get element with newly calculated tabindex
-    const newEl = document.querySelector(`[tabindex="${tabIndex}"]`);
-    // set focus on element to select
-    newEl.focus();
-  }
-});
