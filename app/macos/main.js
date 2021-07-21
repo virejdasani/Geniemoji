@@ -104,12 +104,8 @@ const createWindow = () => {
   });
 
   // This is a global shortcut to activate Geniemoji with hotkey(s)
-  globalShortcut.register("Control+e", () => {
-    if (window.isVisible()) {
-      hideWindow();
-    } else {
-      showWindow();
-    }
+  globalShortcut.register("Ctrl+E", () => {
+    toggleWindow();
   });
   if (process.platform == "darwin") {
     // Don't show the app in the dock for macOS
