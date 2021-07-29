@@ -28,7 +28,7 @@ let tray = undefined;
 let window = undefined;
 
 // Hide the menu and dev tools (for production build)
-// Menu.setApplicationMenu(null);
+Menu.setApplicationMenu(null);
 
 // Let's fetch our previous LRU Map, or set it
 let lruMap;
