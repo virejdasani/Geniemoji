@@ -1,4 +1,4 @@
-var appVersion = "5.0.0";
+var appVersion = "6.0.0";
 
 const electron = window.require("electron");
 
@@ -34,11 +34,14 @@ async function search() {
 
   let answerEmojis;
 
-  const emojis = await electron.ipcRenderer.invoke("getEmojisForSearchString", searchCommand);
+  const emojis = await electron.ipcRenderer.invoke(
+    "getEmojisForSearchString",
+    searchCommand
+  );
   emojis.forEach((item, i) => {
-      currentEmojiLength = i;
-      // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
-      answerEmojis += `
+    currentEmojiLength = i;
+    // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
+    answerEmojis += `
                 <button type="button" onclick="copy('${
                   item.char
                 }')" class="emojiButton" tabindex="${i + 2}">
@@ -47,7 +50,7 @@ async function search() {
                 </button>
                 </br>
             `; // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
-    });
+  });
 
   // If there are no matching emojis, it returns undefined. To not display 'undefined', we do the following
   if (typeof answerEmojis !== "string") {
