@@ -28,15 +28,16 @@ Its purpose is to serve you with the most relevant emojis based on your command!
 
 <img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-navigation.png" alt="Geniemoji Preview Image">
 
-> Geniemoji start page 👆              
+> Geniemoji start page 👆       
+
+<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-angryEmoji.png" alt="Geniemoji Preview Image">
+
+> Geniemoji emoji search 👆       
 
 <img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-geniemoji.png" alt="Geniemoji Preview Image">
 
 > Geniemoji emoji search 👆                
-
-<img src="https://github.com/virejdasani/Geniemoji/blob/master/assets/PreviewImg/SC-angryEmoji.png" alt="Geniemoji Preview Image">
-
-> Geniemoji emoji search 👆      
+     
 
 ## Using the app
 - Go to the releases tab and download the latest version for your operating system
