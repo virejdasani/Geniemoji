@@ -28,6 +28,34 @@ fetch("https://virejdasani.github.io/RemoteJSON/Geniemoji/index.html")
     // console.log(err)
   });
 
+// Windows Segoe UI Emoji does not draw country flags (shows "MX", "US", etc.).
+// Render those with Twemoji images in the UI; clipboard still gets the real emoji.
+function isFlagEmoji(item) {
+  const codes = item.codes.split(" ");
+  if (codes.length === 2) {
+    const a = parseInt(codes[0], 16);
+    const b = parseInt(codes[1], 16);
+    return (
+      a >= 0x1f1e6 &&
+      a <= 0x1f1ff &&
+      b >= 0x1f1e6 &&
+      b <= 0x1f1ff
+    );
+  }
+  // England / Scotland / Wales tag sequences
+  return codes[0] === "1F3F4" && codes.some((c) => c.startsWith("E00"));
+}
+
+function flagImageHtml(item) {
+  const hex = item.codes.split(" ").map((c) => c.toLowerCase()).join("-");
+  const src = `https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/${hex}.png`;
+  return `<img class="emojiFlag" src="${src}" alt="${item.char}" draggable="false">`;
+}
+
+function emojiDisplayHtml(item) {
+  return isFlagEmoji(item) ? flagImageHtml(item) : item.char;
+}
+
 async function search() {
   // Get the value of the search input
   searchCommand = document.getElementById("commandInput").value.toLowerCase();
@@ -45,7 +73,7 @@ async function search() {
                 <button type="button" onclick="copy('${
                   item.char
                 }')" class="emojiButton" tabindex="${i + 2}">
-                    ${item.char}
+                    ${emojiDisplayHtml(item)}
                     ${item.name}
                 </button>
                 </br>
