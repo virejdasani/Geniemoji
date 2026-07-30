@@ -122,17 +122,27 @@ ipcMain.on("typeEmoji", (_event, arg) => {
   robot.typeString(arg);
 });
 
+// Fold accents so Spanish queries like "corazon" match "corazón"
+const fold = (s) =>
+  s.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
+
+const emojiMatchesQuery = (item, query) => {
+  const q = fold(query);
+  return (
+    fold(item.keywords).includes(q) ||
+    fold(item.name).includes(q) ||
+    (item.keywords_es && fold(item.keywords_es).includes(q)) ||
+    (item.name_es && fold(item.name_es).includes(q))
+  );
+};
+
 // Return filtered and sorted emojis based on a search query
 ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
   const recents = Array.from(lruMap.keys());
 
-  // For each emoji in the emojis.js file, this will search
-  // through emoji.keywords and emoji.name (from emojis.js) if it contains the word from the user input
+  // Search English and Spanish names/keywords
   return emojis
-    .filter(
-      (item) =>
-        item.keywords.includes(arg) || item.name.toLowerCase().includes(arg)
-    )
+    .filter((item) => emojiMatchesQuery(item, arg))
     .sort((a, b) => {
       if (lruMap.has(a.char) && !lruMap.has(b.char)) {
         // A is in recently used and B is not
