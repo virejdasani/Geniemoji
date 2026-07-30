@@ -34,6 +34,7 @@ const uiStrings = {
 };
 
 let language = "en";
+let viewStyle = "list";
 var searchCommand;
 let currentEmojiLength = 0;
 
@@ -48,13 +49,20 @@ function emojiName(item) {
   return item.name;
 }
 
-function applyLanguage(nextLanguage) {
-  language = nextLanguage === "es" ? "es" : "en";
+function escapeAttr(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;");
+}
+
+function refreshView() {
   const strings = t();
   const input = document.getElementById("commandInput");
   input.placeholder = strings.placeholder;
+  document.body.classList.toggle("view-grid", viewStyle === "grid");
+  document.body.classList.toggle("view-list", viewStyle !== "grid");
 
-  // Refresh current view: search results or idle help text
   if (input.value) {
     search();
   } else {
@@ -69,12 +77,33 @@ function applyLanguage(nextLanguage) {
   }
 }
 
+function applyLanguage(nextLanguage) {
+  language = nextLanguage === "es" ? "es" : "en";
+  refreshView();
+}
+
+function applyViewStyle(nextViewStyle) {
+  viewStyle = nextViewStyle === "grid" ? "grid" : "list";
+  refreshView();
+}
+
 // Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
 document.getElementById("commandInput").addEventListener("keyup", search);
 
-electron.ipcRenderer.invoke("getLanguage").then(applyLanguage);
+Promise.all([
+  electron.ipcRenderer.invoke("getLanguage"),
+  electron.ipcRenderer.invoke("getViewStyle"),
+]).then(([nextLanguage, nextViewStyle]) => {
+  language = nextLanguage === "es" ? "es" : "en";
+  viewStyle = nextViewStyle === "grid" ? "grid" : "list";
+  refreshView();
+});
+
 electron.ipcRenderer.on("language-changed", (_event, nextLanguage) => {
   applyLanguage(nextLanguage);
+});
+electron.ipcRenderer.on("view-style-changed", (_event, nextViewStyle) => {
+  applyViewStyle(nextViewStyle);
 });
 
 // For app update, if an update is available, the updateAvailable in the RemoteJSON repo will be updated to yes. That will result in the code below being executed
@@ -125,6 +154,25 @@ function emojiDisplayHtml(item) {
   return isFlagEmoji(item) ? flagImageHtml(item) : item.char;
 }
 
+function renderEmojiButton(item, index) {
+  const name = emojiName(item);
+  const title = escapeAttr(name);
+  if (viewStyle === "grid") {
+    return `
+      <button type="button" onclick="copy('${item.char}')" class="emojiButton emojiGridButton" title="${title}" tabindex="${index + 2}">
+        ${emojiDisplayHtml(item)}
+      </button>
+    `;
+  }
+  return `
+    <button type="button" onclick="copy('${item.char}')" class="emojiButton" tabindex="${index + 2}">
+      ${emojiDisplayHtml(item)}
+      ${name}
+    </button>
+    </br>
+  `;
+}
+
 async function search() {
   // Get the value of the search input
   searchCommand = document.getElementById("commandInput").value.toLowerCase();
@@ -138,16 +186,7 @@ async function search() {
   );
   emojis.forEach((item, i) => {
     currentEmojiLength = i;
-    // All the matching emojis are appended into answerEmojis. the '.char' is from the emoji.js file
-    answerEmojis += `
-                <button type="button" onclick="copy('${
-                  item.char
-                }')" class="emojiButton" tabindex="${i + 2}">
-                    ${emojiDisplayHtml(item)}
-                    ${emojiName(item)}
-                </button>
-                </br>
-            `; // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
+    answerEmojis += renderEmojiButton(item, i);
   });
 
   // If there are no matching emojis, it returns undefined. To not display 'undefined', we do the following
@@ -158,6 +197,8 @@ async function search() {
               ${strings.credit}
             </div>
         `;
+  } else if (viewStyle === "grid") {
+    answerEmojis = `<div class="emojiGrid">${answerEmojis}</div>`;
   }
 
   // answerEmojis returns 'undefined' before all the emojis. This is probably a zero index error but this works for now. Whenever this happens, the code below removes 'undefined' from the answer string

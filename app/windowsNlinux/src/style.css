@@ -47,6 +47,13 @@ input[type=text]:focus {
   overflow: hidden;
 }
 
+body.view-grid #answer {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 22px;
+}
+
 .emojiButton {
   padding-top: 1px;
   padding-bottom: 1px;
@@ -56,12 +63,42 @@ input[type=text]:focus {
   margin: 2px;
 }
 
+.emojiGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  padding: 4px 2px 8px;
+}
+
+.emojiGridButton {
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.emojiGridButton:hover {
+  background-color: #3a3a3a;
+}
+
 /* Twemoji flag images — Windows cannot render flag emoji glyphs natively */
 .emojiFlag {
   width: 1.25em;
   height: 1.25em;
   vertical-align: -0.2em;
   display: inline-block;
+}
+
+.emojiGridButton .emojiFlag {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
 }
 
 #info {

@@ -27,6 +27,7 @@ const emojis = require("./src/emojis");
 let tray = undefined;
 let window = undefined;
 let language = store.get("language", "en");
+let viewStyle = store.get("viewStyle", "list");
 
 const trayStrings = {
   en: {
@@ -34,6 +35,9 @@ const trayStrings = {
     languages: "Languages",
     english: "English",
     spanish: "Spanish",
+    viewStyle: "View style",
+    list: "List",
+    grid: "Grid",
     exit: "Exit",
   },
   es: {
@@ -41,6 +45,9 @@ const trayStrings = {
     languages: "Idiomas",
     english: "Inglés",
     spanish: "Español",
+    viewStyle: "Estilo de vista",
+    list: "Lista",
+    grid: "Cuadrícula",
     exit: "Salir",
   },
 };
@@ -71,6 +78,15 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
+const applyWindowSizeForView = () => {
+  if (!window || window.isDestroyed()) return;
+  if (viewStyle === "grid") {
+    window.setSize(350, 420);
+  } else {
+    window.setSize(350, 240);
+  }
+};
+
 const setLanguage = (nextLanguage) => {
   if (nextLanguage !== "en" && nextLanguage !== "es") return;
   language = nextLanguage;
@@ -78,6 +94,17 @@ const setLanguage = (nextLanguage) => {
   updateTrayMenu();
   if (window && !window.isDestroyed()) {
     window.webContents.send("language-changed", language);
+  }
+};
+
+const setViewStyle = (nextViewStyle) => {
+  if (nextViewStyle !== "list" && nextViewStyle !== "grid") return;
+  viewStyle = nextViewStyle;
+  store.set("viewStyle", viewStyle);
+  updateTrayMenu();
+  applyWindowSizeForView();
+  if (window && !window.isDestroyed()) {
+    window.webContents.send("view-style-changed", viewStyle);
   }
 };
 
@@ -104,6 +131,23 @@ const updateTrayMenu = () => {
             type: "radio",
             checked: language === "es",
             click: () => setLanguage("es"),
+          },
+        ],
+      },
+      {
+        label: t.viewStyle,
+        submenu: [
+          {
+            label: t.list,
+            type: "radio",
+            checked: viewStyle === "list",
+            click: () => setViewStyle("list"),
+          },
+          {
+            label: t.grid,
+            type: "radio",
+            checked: viewStyle === "grid",
+            click: () => setViewStyle("grid"),
           },
         ],
       },
@@ -150,6 +194,7 @@ const createWindow = () => {
 
   // Load index.html
   window.loadURL(`file://${path.join(__dirname, "public/index.html")}`);
+  applyWindowSizeForView();
 
   // If 'esc' is pressed, hide the app window
   window.webContents.on("before-input-event", (event, input) => {
@@ -237,6 +282,7 @@ ipcMain.on("selectEmoji", (_event, arg) => {
 });
 
 ipcMain.handle("getLanguage", () => language);
+ipcMain.handle("getViewStyle", () => viewStyle);
 
 const toggleWindow = () => {
   if (window.isVisible()) {
