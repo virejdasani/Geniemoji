@@ -26,6 +26,24 @@ const emojis = require("./src/emojis");
 
 let tray = undefined;
 let window = undefined;
+let language = store.get("language", "en");
+
+const trayStrings = {
+  en: {
+    show: "Show Geniemoji",
+    languages: "Languages",
+    english: "English",
+    spanish: "Spanish",
+    exit: "Exit",
+  },
+  es: {
+    show: "Mostrar Geniemoji",
+    languages: "Idiomas",
+    english: "Inglés",
+    spanish: "Español",
+    exit: "Salir",
+  },
+};
 
 // Hide the menu and dev tools (for production build)
 Menu.setApplicationMenu(null);
@@ -53,11 +71,60 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
+const setLanguage = (nextLanguage) => {
+  if (nextLanguage !== "en" && nextLanguage !== "es") return;
+  language = nextLanguage;
+  store.set("language", language);
+  updateTrayMenu();
+  if (window && !window.isDestroyed()) {
+    window.webContents.send("language-changed", language);
+  }
+};
+
+const updateTrayMenu = () => {
+  if (!tray) return;
+  const t = trayStrings[language] || trayStrings.en;
+  tray.setContextMenu(
+    Menu.buildFromTemplate([
+      {
+        label: t.show,
+        click: () => showWindow(),
+      },
+      {
+        label: t.languages,
+        submenu: [
+          {
+            label: t.english,
+            type: "radio",
+            checked: language === "en",
+            click: () => setLanguage("en"),
+          },
+          {
+            label: t.spanish,
+            type: "radio",
+            checked: language === "es",
+            click: () => setLanguage("es"),
+          },
+        ],
+      },
+      { type: "separator" },
+      {
+        label: t.exit,
+        click: () => {
+          globalShortcut.unregisterAll();
+          app.quit();
+        },
+      },
+    ])
+  );
+};
+
 const createTray = () => {
   tray = new Tray(path.join(assetsDirectory, "geniemojiLamp@2x.png"));
-  tray.on("right-click", toggleWindow);
+  tray.setToolTip("Geniemoji");
+  updateTrayMenu();
   tray.on("double-click", toggleWindow);
-  tray.on("click", function (event) {
+  tray.on("click", () => {
     toggleWindow();
   });
 };
@@ -168,6 +235,8 @@ ipcMain.on("selectEmoji", (_event, arg) => {
   // Save our current lruMap's JSON representation to the store
   store.set("lruMap", lruMap.toJSON());
 });
+
+ipcMain.handle("getLanguage", () => language);
 
 const toggleWindow = () => {
   if (window.isVisible()) {

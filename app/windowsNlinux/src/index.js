@@ -2,11 +2,80 @@ var appVersion = "6.0.0";
 
 const electron = window.require("electron");
 
+const uiStrings = {
+  en: {
+    placeholder: "Search Emoji",
+    help:
+      "Use 'Control + E' to summon Geniemoji</br></br>" +
+      "Arrow Keys to go up and down</br>" +
+      "Enter to copy the Emoji",
+    credit:
+      '<a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is ' +
+      'developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>',
+    noMatch: "No matching emojis found 😢",
+    copied:
+      "Copied emoji to clipboard!</br></br>" +
+      "Press Escape to close this window</br></br>",
+  },
+  es: {
+    placeholder: "Buscar emoji",
+    help:
+      "Usa 'Control + E' para abrir Geniemoji</br></br>" +
+      "Flechas para subir y bajar</br>" +
+      "Enter para copiar el emoji",
+    credit:
+      '<a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> fue ' +
+      'desarrollado por <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>',
+    noMatch: "No se encontraron emojis 😢",
+    copied:
+      "¡Emoji copiado al portapapeles!</br></br>" +
+      "Presiona Escape para cerrar esta ventana</br></br>",
+  },
+};
+
+let language = "en";
+var searchCommand;
+let currentEmojiLength = 0;
+
+function t() {
+  return uiStrings[language] || uiStrings.en;
+}
+
+function emojiName(item) {
+  if (language === "es") {
+    return item.name_es || item.name;
+  }
+  return item.name;
+}
+
+function applyLanguage(nextLanguage) {
+  language = nextLanguage === "es" ? "es" : "en";
+  const strings = t();
+  const input = document.getElementById("commandInput");
+  input.placeholder = strings.placeholder;
+
+  // Refresh current view: search results or idle help text
+  if (input.value) {
+    search();
+  } else {
+    document.getElementById("answer").innerHTML = `
+      <div id="info">
+        ${strings.help}
+      </div>
+      <div id="credit">
+        ${strings.credit}
+      </div>
+    `;
+  }
+}
+
 // Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
 document.getElementById("commandInput").addEventListener("keyup", search);
 
-var searchCommand;
-let currentEmojiLength = 0;
+electron.ipcRenderer.invoke("getLanguage").then(applyLanguage);
+electron.ipcRenderer.on("language-changed", (_event, nextLanguage) => {
+  applyLanguage(nextLanguage);
+});
 
 // For app update, if an update is available, the updateAvailable in the RemoteJSON repo will be updated to yes. That will result in the code below being executed
 fetch("https://virejdasani.github.io/RemoteJSON/Geniemoji/index.html")
@@ -61,6 +130,7 @@ async function search() {
   searchCommand = document.getElementById("commandInput").value.toLowerCase();
 
   let answerEmojis;
+  const strings = t();
 
   const emojis = await electron.ipcRenderer.invoke(
     "getEmojisForSearchString",
@@ -74,7 +144,7 @@ async function search() {
                   item.char
                 }')" class="emojiButton" tabindex="${i + 2}">
                     ${emojiDisplayHtml(item)}
-                    ${item.name}
+                    ${emojiName(item)}
                 </button>
                 </br>
             `; // item.char is the emoji and item.name is the emoji name, both from the emojis.js file
@@ -83,10 +153,9 @@ async function search() {
   // If there are no matching emojis, it returns undefined. To not display 'undefined', we do the following
   if (typeof answerEmojis !== "string") {
     answerEmojis = `
-            <h3 id="displayedEmojiName">No matching emojis found 😢</h3>
+            <h3 id="displayedEmojiName">${strings.noMatch}</h3>
             <div id="credit">
-              <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is
-              developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>
+              ${strings.credit}
             </div>
         `;
   }
@@ -122,14 +191,13 @@ function copy(text) {
   textarea.select();
   document.execCommand("copy");
   document.body.removeChild(textarea);
+  const strings = t();
   document.getElementById("answer").innerHTML = `
         <div id="info">
           </br>
-          Copied emoji to clipboard!</br></br>
-          Press Escape to close this window</br></br>
+          ${strings.copied}
           <div id="credit">
-            <a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is
-            developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>
+            ${strings.credit}
           </div>
         </div>
     `;
