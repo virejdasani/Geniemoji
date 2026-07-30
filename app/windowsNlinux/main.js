@@ -118,7 +118,8 @@ const emojiMatchesQuery = (item, query) => {
     fold(item.keywords).includes(q) ||
     fold(item.name).includes(q) ||
     (item.keywords_es && fold(item.keywords_es).includes(q)) ||
-    (item.name_es && fold(item.name_es).includes(q))
+    (item.name_es && fold(item.name_es).includes(q)) ||
+    (item.alias && fold(item.alias).includes(q))
   );
 };
 
