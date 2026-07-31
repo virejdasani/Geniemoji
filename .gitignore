@@ -5,6 +5,7 @@ app/windowsNlinux/node_modules
 
 app/macos/.vscode
 app/windowsNlinux/node_modules
+app/windowsNlinux/dist/
 
 builds/**/*.zip
 
