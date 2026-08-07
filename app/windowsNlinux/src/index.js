@@ -6,24 +6,26 @@ const GRID_COLUMNS = 8;
 
 const uiStrings = {
   en: {
-    placeholder: "Search Emoji",
+    placeholder: "Search emoji or shortcut",
     help:
       "Use 'Control + E' to summon Geniemoji</br></br>" +
       "Arrow Keys to navigate</br>" +
       "Enter to type the Emoji</br>" +
-      "Escape to close",
+      "Escape to close</br></br>" +
+      "Add text shortcuts from the tray menu",
     credit:
       '<a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is ' +
       'developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>',
     noMatch: "No matching emojis found 😢",
   },
   es: {
-    placeholder: "Buscar emoji",
+    placeholder: "Buscar emoji o atajo",
     help:
       "Usa 'Control + E' para abrir Geniemoji</br></br>" +
       "Flechas para navegar</br>" +
       "Enter para escribir el emoji</br>" +
-      "Escape para cerrar",
+      "Escape para cerrar</br></br>" +
+      "Agrega atajos de texto desde el menú de la bandeja",
     credit:
       '<a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> fue ' +
       'desarrollado por <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>',
@@ -196,19 +198,48 @@ function emojiDisplayHtml(item) {
   return isFlagEmoji(item) ? flagImageHtml(item) : item.char;
 }
 
+function truncatePreview(text, max = 36) {
+  const value = String(text).replace(/\s+/g, " ").trim();
+  if (value.length <= max) return value;
+  return `${value.slice(0, max)}…`;
+}
+
 function renderEmojiButton(item, index) {
-  const name = emojiName(item);
-  const title = escapeAttr(name);
+  const isShortcut = item.kind === "shortcut";
+  const name = isShortcut ? item.name : emojiName(item);
+  const title = escapeAttr(
+    isShortcut ? `${item.name} → ${item.char}` : name
+  );
   const selectedClass = index === selectedIndex ? " selected" : "";
+  const shortcutClass = isShortcut ? " shortcutButton" : "";
+
   if (viewStyle === "grid") {
+    if (isShortcut) {
+      return `
+        <button type="button" onclick="typeEmojiAt(${index})" class="emojiButton emojiGridButton shortcutGridButton${selectedClass}${shortcutClass}" title="${title}" data-index="${index}" tabindex="-1">
+          <span class="shortcutTrigger">${escapeAttr(name)}</span>
+        </button>
+      `;
+    }
     return `
-      <button type="button" onclick="typeEmoji('${item.char}')" class="emojiButton emojiGridButton${selectedClass}" title="${title}" data-index="${index}" tabindex="-1">
+      <button type="button" onclick="typeEmojiAt(${index})" class="emojiButton emojiGridButton${selectedClass}" title="${title}" data-index="${index}" tabindex="-1">
         ${emojiDisplayHtml(item)}
       </button>
     `;
   }
+
+  if (isShortcut) {
+    return `
+      <button type="button" onclick="typeEmojiAt(${index})" class="emojiButton${selectedClass}${shortcutClass}" title="${title}" data-index="${index}" tabindex="-1">
+        <span class="shortcutTrigger">${escapeAttr(name)}</span>
+        <span class="shortcutPreview">${escapeAttr(truncatePreview(item.char))}</span>
+      </button>
+      </br>
+    `;
+  }
+
   return `
-    <button type="button" onclick="typeEmoji('${item.char}')" class="emojiButton${selectedClass}" data-index="${index}" tabindex="-1">
+    <button type="button" onclick="typeEmojiAt(${index})" class="emojiButton${selectedClass}" data-index="${index}" tabindex="-1">
       ${emojiDisplayHtml(item)}
       ${name}
     </button>
@@ -255,16 +286,23 @@ async function search() {
   focusSearchInput();
 } // Search function end
 
-// Enter types the highlighted emoji, copies it, and closes Geniemoji
+// Enter types the highlighted emoji/shortcut, copies it, and closes Geniemoji
 document.getElementById("commandInput").addEventListener("keydown", (e) => {
   if (e.code === "Enter" || e.code === "NumpadEnter") {
     e.preventDefault();
-    if (!currentEmojis.length) return;
-    const emoji = currentEmojis[selectedIndex];
-    if (!emoji) return;
-    typeEmoji(emoji.char);
+    typeEmojiAt(selectedIndex);
   }
 });
+
+function typeEmojiAt(index) {
+  const item = currentEmojis[index];
+  if (!item) return;
+  // Keep recent-emoji history for emojis only
+  if (item.kind !== "shortcut") {
+    electron.ipcRenderer.send("selectEmoji", item.char);
+  }
+  electron.ipcRenderer.send("typeEmoji", item.char);
+}
 
 function typeEmoji(text) {
   electron.ipcRenderer.send("selectEmoji", text);

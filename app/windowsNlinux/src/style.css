@@ -150,6 +150,45 @@ button[type=button]:focus {
   background-color: #3a3a3a;
 }
 
+.shortcutButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 96%;
+  text-align: left;
+}
+
+.shortcutTrigger {
+  font-weight: 600;
+}
+
+.shortcutPreview {
+  color: #8f8f8f;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shortcutPreview::before {
+  content: "→ ";
+}
+
+.shortcutGridButton {
+  font-size: 11px;
+  line-height: 1.1;
+  padding: 4px;
+  word-break: break-word;
+}
+
+.shortcutGridButton .shortcutTrigger {
+  font-weight: 600;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
 ::-webkit-scrollbar {
   background-color: #222222;
   width: 10px !important;

@@ -26,8 +26,10 @@ const emojis = require("./src/emojis");
 
 let tray = undefined;
 let window = undefined;
+let shortcutWindow = undefined;
 let language = store.get("language", "en");
 let viewStyle = store.get("viewStyle", "list");
+let textShortcuts = normalizeTextShortcuts(store.get("textShortcuts", []));
 
 const trayStrings = {
   en: {
@@ -38,6 +40,11 @@ const trayStrings = {
     viewStyle: "View style",
     list: "List",
     grid: "Grid",
+    shortcuts: "Shortcuts",
+    addShortcut: "Add shortcut…",
+    editShortcut: "Edit",
+    removeShortcut: "Remove",
+    noShortcuts: "No shortcuts yet",
     exit: "Exit",
   },
   es: {
@@ -48,9 +55,53 @@ const trayStrings = {
     viewStyle: "Estilo de vista",
     list: "Lista",
     grid: "Cuadrícula",
+    shortcuts: "Atajos",
+    addShortcut: "Agregar atajo…",
+    editShortcut: "Editar",
+    removeShortcut: "Eliminar",
+    noShortcuts: "Sin atajos todavía",
     exit: "Salir",
   },
 };
+
+function normalizeTextShortcuts(list) {
+  if (!Array.isArray(list)) return [];
+  const seen = new Set();
+  const normalized = [];
+  for (const item of list) {
+    if (!item || typeof item.trigger !== "string" || typeof item.value !== "string") {
+      continue;
+    }
+    const trigger = item.trigger.trim();
+    const value = item.value;
+    if (!trigger || !value.trim()) continue;
+    const key = trigger.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    normalized.push({ trigger, value });
+  }
+  return normalized.sort((a, b) =>
+    a.trigger.localeCompare(b.trigger, undefined, { sensitivity: "base" })
+  );
+}
+
+function persistTextShortcuts() {
+  store.set("textShortcuts", textShortcuts);
+  updateTrayMenu();
+}
+
+function shortcutToSearchItem(shortcut) {
+  return {
+    kind: "shortcut",
+    no: -1,
+    codes: "",
+    char: shortcut.value,
+    name: shortcut.trigger,
+    name_es: shortcut.trigger,
+    keywords: shortcut.trigger,
+    keywords_es: shortcut.trigger,
+  };
+}
 
 // Let's fetch our previous LRU Map, or set it
 let lruMap;
@@ -105,9 +156,85 @@ const setViewStyle = (nextViewStyle) => {
   }
 };
 
+const openShortcutWindow = (triggerToEdit = null) => {
+  if (shortcutWindow && !shortcutWindow.isDestroyed()) {
+    shortcutWindow.focus();
+    return;
+  }
+
+  shortcutWindow = new BrowserWindow({
+    width: 360,
+    height: 320,
+    show: false,
+    resizable: false,
+    minimizable: false,
+    maximizable: false,
+    fullscreenable: false,
+    alwaysOnTop: true,
+    title: "Geniemoji",
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+
+  const query = triggerToEdit
+    ? `?trigger=${encodeURIComponent(triggerToEdit)}`
+    : "";
+  shortcutWindow.loadURL(
+    `file://${path.join(__dirname, "public/shortcut.html")}${query}`
+  );
+  shortcutWindow.setMenu(null);
+  shortcutWindow.once("ready-to-show", () => {
+    if (shortcutWindow && !shortcutWindow.isDestroyed()) {
+      shortcutWindow.show();
+    }
+  });
+  shortcutWindow.on("closed", () => {
+    shortcutWindow = undefined;
+  });
+};
+
+const closeShortcutWindow = () => {
+  if (shortcutWindow && !shortcutWindow.isDestroyed()) {
+    shortcutWindow.close();
+  }
+};
+
 const updateTrayMenu = () => {
   if (!tray) return;
   const t = trayStrings[language] || trayStrings.en;
+
+  const shortcutItems =
+    textShortcuts.length === 0
+      ? [{ label: t.noShortcuts, enabled: false }]
+      : textShortcuts.map((shortcut) => {
+          const preview =
+            shortcut.value.length > 28
+              ? `${shortcut.value.slice(0, 28)}…`
+              : shortcut.value;
+          return {
+            label: `${shortcut.trigger} → ${preview}`,
+            submenu: [
+              {
+                label: t.editShortcut,
+                click: () => openShortcutWindow(shortcut.trigger),
+              },
+              {
+                label: t.removeShortcut,
+                click: () => {
+                  textShortcuts = textShortcuts.filter(
+                    (item) =>
+                      item.trigger.toLowerCase() !==
+                      shortcut.trigger.toLowerCase()
+                  );
+                  persistTextShortcuts();
+                },
+              },
+            ],
+          };
+        });
+
   tray.setContextMenu(
     Menu.buildFromTemplate([
       {
@@ -146,6 +273,17 @@ const updateTrayMenu = () => {
             checked: viewStyle === "grid",
             click: () => setViewStyle("grid"),
           },
+        ],
+      },
+      {
+        label: t.shortcuts,
+        submenu: [
+          {
+            label: t.addShortcut,
+            click: () => openShortcutWindow(),
+          },
+          { type: "separator" },
+          ...shortcutItems,
         ],
       },
       { type: "separator" },
@@ -244,13 +382,35 @@ const emojiMatchesQuery = (item, query) => {
   );
 };
 
-// Return filtered and sorted emojis based on a search query
+const shortcutMatchesQuery = (shortcut, query) => {
+  const q = fold(query);
+  if (!q) return false;
+  return (
+    fold(shortcut.trigger).includes(q) || fold(shortcut.value).includes(q)
+  );
+};
+
+// Return filtered and sorted emojis (plus text shortcuts) based on a search query
 ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
   const recents = Array.from(lruMap.keys());
+  const query = String(arg || "").trim();
+
+  const matchedShortcuts = textShortcuts
+    .filter((shortcut) => shortcutMatchesQuery(shortcut, query))
+    .sort((a, b) => {
+      const q = fold(query);
+      const aExact = fold(a.trigger) === q ? 0 : 1;
+      const bExact = fold(b.trigger) === q ? 0 : 1;
+      if (aExact !== bExact) return aExact - bExact;
+      return a.trigger.localeCompare(b.trigger, undefined, {
+        sensitivity: "base",
+      });
+    })
+    .map(shortcutToSearchItem);
 
   // Search English and Spanish names/keywords
-  return emojis
-    .filter((item) => emojiMatchesQuery(item, arg))
+  const matchedEmojis = emojis
+    .filter((item) => emojiMatchesQuery(item, query))
     .sort((a, b) => {
       if (lruMap.has(a.char) && !lruMap.has(b.char)) {
         // A is in recently used and B is not
@@ -265,7 +425,44 @@ ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
         // Both A and B are in recently used
         return recents.indexOf(b.char) - recents.indexOf(a.char);
       }
-    })
+    });
+
+  // Shortcuts first so custom expansions win over emoji name matches
+  return matchedShortcuts.concat(matchedEmojis);
+});
+
+ipcMain.handle("getTextShortcuts", () => textShortcuts);
+
+ipcMain.on("saveTextShortcut", (_event, payload) => {
+  if (!payload || typeof payload !== "object") return;
+
+  const trigger =
+    typeof payload.trigger === "string" ? payload.trigger.trim() : "";
+  const value = typeof payload.value === "string" ? payload.value : "";
+  const previousTrigger =
+    typeof payload.previousTrigger === "string"
+      ? payload.previousTrigger.trim()
+      : "";
+
+  if (!trigger || !value.trim()) return;
+
+  const nextKey = trigger.toLowerCase();
+  const previousKey = previousTrigger.toLowerCase();
+
+  textShortcuts = textShortcuts.filter((item) => {
+    const key = item.trigger.toLowerCase();
+    if (previousKey && key === previousKey) return false;
+    if (key === nextKey) return false;
+    return true;
+  });
+  textShortcuts.push({ trigger, value });
+  textShortcuts = normalizeTextShortcuts(textShortcuts);
+  persistTextShortcuts();
+  closeShortcutWindow();
+});
+
+ipcMain.on("closeShortcutWindow", () => {
+  closeShortcutWindow();
 });
 
 const pasteClipboard = async () => {
