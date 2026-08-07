@@ -2,41 +2,40 @@ var appVersion = "6.0.0";
 
 const electron = window.require("electron");
 
+const GRID_COLUMNS = 8;
+
 const uiStrings = {
   en: {
     placeholder: "Search Emoji",
     help:
       "Use 'Control + E' to summon Geniemoji</br></br>" +
-      "Arrow Keys to go up and down</br>" +
-      "Enter to copy the Emoji",
+      "Arrow Keys to navigate</br>" +
+      "Enter to type the Emoji</br>" +
+      "Escape to close",
     credit:
       '<a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> is ' +
       'developed by <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>',
     noMatch: "No matching emojis found 😢",
-    copied:
-      "Copied emoji to clipboard!</br></br>" +
-      "Press Escape to close this window</br></br>",
   },
   es: {
     placeholder: "Buscar emoji",
     help:
       "Usa 'Control + E' para abrir Geniemoji</br></br>" +
-      "Flechas para subir y bajar</br>" +
-      "Enter para copiar el emoji",
+      "Flechas para navegar</br>" +
+      "Enter para escribir el emoji</br>" +
+      "Escape para cerrar",
     credit:
       '<a href="https://virejdasani.github.io/Geniemoji/" target="_blank">Geniemoji</a> fue ' +
       'desarrollado por <a href="https://virejdasani.github.io/virej/" target="_blank">Virej Dasani</a>',
     noMatch: "No se encontraron emojis 😢",
-    copied:
-      "¡Emoji copiado al portapapeles!</br></br>" +
-      "Presiona Escape para cerrar esta ventana</br></br>",
   },
 };
 
 let language = "en";
 let viewStyle = "list";
 var searchCommand;
-let currentEmojiLength = 0;
+let currentEmojis = [];
+let selectedIndex = 0;
 
 function t() {
   return uiStrings[language] || uiStrings.en;
@@ -66,6 +65,8 @@ function refreshView() {
   if (input.value) {
     search();
   } else {
+    currentEmojis = [];
+    selectedIndex = 0;
     document.getElementById("answer").innerHTML = `
       <div id="info">
         ${strings.help}
@@ -87,8 +88,49 @@ function applyViewStyle(nextViewStyle) {
   refreshView();
 }
 
-// Whenever a letter is entered into the commandInput field, the search() function is executed. With this, matching emojis are displayed as the user is typing
-document.getElementById("commandInput").addEventListener("keyup", search);
+function focusSearchInput() {
+  const input = document.getElementById("commandInput");
+  if (input) input.focus();
+}
+
+function applySelectionHighlight() {
+  const buttons = document.querySelectorAll(".emojiButton");
+  buttons.forEach((button, index) => {
+    button.classList.toggle("selected", index === selectedIndex);
+  });
+  const selected = buttons[selectedIndex];
+  if (selected) {
+    selected.scrollIntoView({ block: "nearest" });
+  }
+}
+
+function selectEmojiAt(index) {
+  if (!currentEmojis.length) return;
+  const max = currentEmojis.length - 1;
+  selectedIndex = Math.max(0, Math.min(max, index));
+  applySelectionHighlight();
+  focusSearchInput();
+}
+
+function moveSelection(delta) {
+  if (!currentEmojis.length) return;
+  const max = currentEmojis.length;
+  selectedIndex = (selectedIndex + delta + max) % max;
+  applySelectionHighlight();
+  focusSearchInput();
+}
+
+function moveSelectionVertical(direction) {
+  if (!currentEmojis.length) return;
+  if (viewStyle === "grid") {
+    selectEmojiAt(selectedIndex + direction * GRID_COLUMNS);
+  } else {
+    moveSelection(direction);
+  }
+}
+
+// Search as the user types. Use 'input' (not keyup) so arrow-key navigation does not reset selection.
+document.getElementById("commandInput").addEventListener("input", search);
 
 Promise.all([
   electron.ipcRenderer.invoke("getLanguage"),
@@ -157,15 +199,16 @@ function emojiDisplayHtml(item) {
 function renderEmojiButton(item, index) {
   const name = emojiName(item);
   const title = escapeAttr(name);
+  const selectedClass = index === selectedIndex ? " selected" : "";
   if (viewStyle === "grid") {
     return `
-      <button type="button" onclick="copy('${item.char}')" class="emojiButton emojiGridButton" title="${title}" tabindex="${index + 2}">
+      <button type="button" onclick="typeEmoji('${item.char}')" class="emojiButton emojiGridButton${selectedClass}" title="${title}" data-index="${index}" tabindex="-1">
         ${emojiDisplayHtml(item)}
       </button>
     `;
   }
   return `
-    <button type="button" onclick="copy('${item.char}')" class="emojiButton" tabindex="${index + 2}">
+    <button type="button" onclick="typeEmoji('${item.char}')" class="emojiButton${selectedClass}" data-index="${index}" tabindex="-1">
       ${emojiDisplayHtml(item)}
       ${name}
     </button>
@@ -184,8 +227,9 @@ async function search() {
     "getEmojisForSearchString",
     searchCommand
   );
+  currentEmojis = emojis;
+  selectedIndex = 0;
   emojis.forEach((item, i) => {
-    currentEmojiLength = i;
     answerEmojis += renderEmojiButton(item, i);
   });
 
@@ -208,63 +252,46 @@ async function search() {
 
   // Displays all the matching emojis in the answer html div
   document.getElementById("answer").innerHTML = answerEmojis;
+  focusSearchInput();
 } // Search function end
 
-// This is to prevent page reload when Enter is pressed in the emoji search bar
+// Enter types the highlighted emoji, copies it, and closes Geniemoji
 document.getElementById("commandInput").addEventListener("keydown", (e) => {
-  if (e.code === "Enter") {
+  if (e.code === "Enter" || e.code === "NumpadEnter") {
     e.preventDefault();
-
-    // User has clicked enter, let's autoclick the first item
-    document.querySelector('[tabindex="2"]').click();
+    if (!currentEmojis.length) return;
+    const emoji = currentEmojis[selectedIndex];
+    if (!emoji) return;
+    typeEmoji(emoji.char);
   }
 });
 
-// This is executed when an emoji button is pressed
-function copy(text) {
-  // Register recent use of emoji
+function typeEmoji(text) {
   electron.ipcRenderer.send("selectEmoji", text);
-
-  // To copy, a text area is created, the emojiChar is added to the text area. This is then selected and copied. After it is copied, the text area is deleted
-  var textarea = document.createElement("textarea");
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand("copy");
-  document.body.removeChild(textarea);
-  const strings = t();
-  document.getElementById("answer").innerHTML = `
-        <div id="info">
-          </br>
-          ${strings.copied}
-          <div id="credit">
-            ${strings.credit}
-          </div>
-        </div>
-    `;
+  electron.ipcRenderer.send("typeEmoji", text);
 }
 
-// For arrow key navigation
+// Arrow keys move selection highlight without leaving the search input
 document.addEventListener("keydown", (event) => {
-  // Key is ArrowUp or ArrowDown?
-  if (event.code === "ArrowDown" || event.code === "ArrowUp") {
-    event.preventDefault();
-    // get tabIndex of current element
-    let tabIndex = event.target.tabIndex;
-    // increment or decrement tabindex depending on Key (ArrowUp -> previous Element, ArrowDown -> next lement)
-    tabIndex += event.code === "ArrowUp" ? -1 : 1;
-    // circle through emojis
-    // ArrowUp and focus on input field? -> select last emoji
-    if (tabIndex < 1) {
-      tabIndex = currentEmojiLength + 2; // '+2': tabIndex starts with 1, 1 = input
-    }
-    // ArrowDown and focus on last emoji? -> select input field
-    if (tabIndex > currentEmojiLength + 2) {
-      tabIndex = 1;
-    }
-    // get element with newly calculated tabindex
-    const newEl = document.querySelector(`[tabindex="${tabIndex}"]`);
-    // set focus on element to select
-    newEl.focus();
+  if (
+    event.code !== "ArrowDown" &&
+    event.code !== "ArrowUp" &&
+    event.code !== "ArrowLeft" &&
+    event.code !== "ArrowRight"
+  ) {
+    return;
+  }
+  if (!currentEmojis.length) return;
+
+  event.preventDefault();
+
+  if (event.code === "ArrowRight") {
+    moveSelection(1);
+  } else if (event.code === "ArrowLeft") {
+    moveSelection(-1);
+  } else if (event.code === "ArrowDown") {
+    moveSelectionVertical(1);
+  } else if (event.code === "ArrowUp") {
+    moveSelectionVertical(-1);
   }
 });

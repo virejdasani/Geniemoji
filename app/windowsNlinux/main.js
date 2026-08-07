@@ -1,5 +1,9 @@
-const { app, BrowserWindow, Tray, globalShortcut, Menu, ipcMain } = require("electron");
+const { app, BrowserWindow, Tray, globalShortcut, Menu, ipcMain, clipboard } = require("electron");
 const { LRUMap } = require("lru_map");
+const { execFile } = require("child_process");
+const { promisify } = require("util");
+
+const execFileAsync = promisify(execFile);
 
 // Create store to save user's recents
 const Store = require('electron-store');
@@ -9,6 +13,11 @@ const store = new Store();
 const open = require("open");
 
 const path = require("path");
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Ignore blur-to-hide while we close + paste into the previous app
+let insertingEmoji = false;
 
 const assetsDirectory = path.join(__dirname, "assets");
 
@@ -188,7 +197,6 @@ const createWindow = () => {
   window.webContents.on("before-input-event", (event, input) => {
     if (input.key === "Escape") {
       hideWindow();
-      // event.preventDefault()
     }
   });
 
@@ -200,6 +208,7 @@ const createWindow = () => {
 
   // Hide the window when it loses focus
   window.on("blur", () => {
+    if (insertingEmoji) return;
     hideWindow();
   });
 
@@ -257,6 +266,50 @@ ipcMain.handle("getEmojisForSearchString", (_event, arg) => {
         return recents.indexOf(b.char) - recents.indexOf(a.char);
       }
     })
+});
+
+const pasteClipboard = async () => {
+  if (process.platform === "win32") {
+    await execFileAsync(
+      "powershell.exe",
+      [
+        "-NoProfile",
+        "-STA",
+        "-Command",
+        "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('^v')",
+      ],
+      { windowsHide: true }
+    );
+    return;
+  }
+
+  if (process.platform === "darwin") {
+    await execFileAsync("osascript", [
+      "-e",
+      'tell application "System Events" to keystroke "v" using command down',
+    ]);
+    return;
+  }
+
+  await execFileAsync("xdotool", ["key", "ctrl+v"]);
+};
+
+// Copy emoji, close Geniemoji (focus returns to previous app), then paste
+ipcMain.on("typeEmoji", async (_event, arg) => {
+  if (!window || window.isDestroyed()) return;
+
+  insertingEmoji = true;
+  clipboard.writeText(arg);
+
+  try {
+    hideWindow();
+    await sleep(100);
+    await pasteClipboard();
+  } catch (err) {
+    console.error("Failed to type emoji:", err);
+  } finally {
+    insertingEmoji = false;
+  }
 });
 
 // When we get a signal to select an emoji, update our LRU Map

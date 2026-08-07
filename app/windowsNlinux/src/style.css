@@ -140,6 +140,16 @@ button[type=button]:focus {
   background-color: #656565;
 }
 
+/* Arrow-key selection highlight while the search input keeps focus */
+.emojiButton.selected {
+  outline: none;
+  background-color: #656565;
+}
+
+.emojiGridButton.selected {
+  background-color: #3a3a3a;
+}
+
 ::-webkit-scrollbar {
   background-color: #222222;
   width: 10px !important;
