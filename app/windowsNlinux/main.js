@@ -30,6 +30,7 @@ let shortcutWindow = undefined;
 let language = store.get("language", "en");
 let viewStyle = store.get("viewStyle", "list");
 let textShortcuts = normalizeTextShortcuts(store.get("textShortcuts", []));
+let openAtLogin = store.get("openAtLogin", false);
 
 const trayStrings = {
   en: {
@@ -45,6 +46,10 @@ const trayStrings = {
     editShortcut: "Edit",
     removeShortcut: "Remove",
     noShortcuts: "No shortcuts yet",
+    openAtLogin:
+      process.platform === "darwin"
+        ? "Start at login"
+        : "Start with Windows",
     exit: "Exit",
   },
   es: {
@@ -60,6 +65,10 @@ const trayStrings = {
     editShortcut: "Editar",
     removeShortcut: "Eliminar",
     noShortcuts: "Sin atajos todavía",
+    openAtLogin:
+      process.platform === "darwin"
+        ? "Iniciar al iniciar sesión"
+        : "Iniciar con Windows",
     exit: "Salir",
   },
 };
@@ -116,7 +125,42 @@ if (store.has("lruMap")) {
 // Hide the menu and dev tools
 Menu.setApplicationMenu(null)
 
+const applyOpenAtLogin = (enabled) => {
+  // Login items are supported on Windows (and macOS); skip elsewhere.
+  if (process.platform !== "win32" && process.platform !== "darwin") {
+    return;
+  }
+
+  const settings = { openAtLogin: !!enabled };
+
+  // When running via `electron .`, also pass the app entry so relaunch works.
+  if (!app.isPackaged) {
+    settings.path = process.execPath;
+    settings.args = [path.resolve(process.argv[1] || ".")];
+  }
+
+  app.setLoginItemSettings(settings);
+};
+
+const setOpenAtLogin = (enabled) => {
+  openAtLogin = !!enabled;
+  store.set("openAtLogin", openAtLogin);
+  applyOpenAtLogin(openAtLogin);
+  updateTrayMenu();
+};
+
 app.on("ready", () => {
+  // Prefer the OS login-item state if present; otherwise use stored preference.
+  if (process.platform === "win32" || process.platform === "darwin") {
+    const loginItem = app.getLoginItemSettings();
+    if (typeof loginItem.openAtLogin === "boolean") {
+      openAtLogin = loginItem.openAtLogin;
+      store.set("openAtLogin", openAtLogin);
+    } else {
+      applyOpenAtLogin(openAtLogin);
+    }
+  }
+
   createTray();
   createWindow();
 });
@@ -286,6 +330,16 @@ const updateTrayMenu = () => {
           ...shortcutItems,
         ],
       },
+      ...(process.platform === "win32" || process.platform === "darwin"
+        ? [
+            {
+              label: t.openAtLogin,
+              type: "checkbox",
+              checked: openAtLogin,
+              click: (menuItem) => setOpenAtLogin(menuItem.checked),
+            },
+          ]
+        : []),
       { type: "separator" },
       {
         label: t.exit,
