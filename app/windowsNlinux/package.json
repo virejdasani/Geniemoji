@@ -6,7 +6,9 @@
   "scripts": {
     "start": "electron .",
     "pack-win32-x64": "electron-packager . Geniemoji --platform=win32 --arch=x64 --icon=assets/AppIcons/icon.ico --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid --ignore=assets/oldIcons",
-    "pack-linux-x64": "electron-packager . Geniemoji --platform=linux --arch=x64 --icon=assets/AppIcons/icon.png --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid --ignore=assets/oldIcons"
+    "pack-linux-x64": "electron-packager . Geniemoji --platform=linux --arch=x64 --icon=assets/AppIcons/icon.png --ignore=builds --ignore=docs --ignore=assets/PreviewImg --ignore=assets/PreviewVid --ignore=assets/oldIcons",
+    "dist": "electron-builder --win nsis",
+    "dist:dir": "electron-builder --win --dir"
   },
   "repository": {
     "type": "git",
@@ -26,9 +28,52 @@
   },
   "homepage": "https://github.com/virejdasani/Geniemoji#readme",
   "dependencies": {
-    "electron": "^12.0.4",
     "electron-store": "^8.0.0",
     "lru_map": "^0.4.1",
     "open": "^8.0.9"
+  },
+  "devDependencies": {
+    "electron": "^12.0.4",
+    "electron-builder": "^24.13.3",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.virejdasani.geniemoji",
+    "productName": "Geniemoji",
+    "copyright": "Copyright © Virej Dasani",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "public/**/*",
+      "src/**/*",
+      "assets/geniemojiLamp.png",
+      "assets/geniemojiLamp@2x.png",
+      "assets/geniemojiLamp@4x.png",
+      "assets/AppIcons/**/*"
+    ],
+    "win": {
+      "icon": "assets/AppIcons/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Geniemoji",
+      "uninstallDisplayName": "Geniemoji",
+      "artifactName": "Geniemoji-Setup-${version}.${ext}"
+    }
   }
 }

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../src/style.css">
+  <title>Geniemoji Shortcut</title>
+  <style>
+    body.shortcut-page {
+      overflow: auto;
+    }
+
+    .shortcut-page .app {
+      text-align: left;
+      padding: 16px 18px;
+    }
+
+    .shortcut-page h1 {
+      font-size: 16px;
+      margin: 0 0 14px;
+      font-weight: 600;
+    }
+
+    .shortcut-page label {
+      display: block;
+      font-size: 12px;
+      color: #a0a0a0;
+      margin-bottom: 4px;
+    }
+
+    .shortcut-page .field {
+      margin-bottom: 12px;
+    }
+
+    .shortcut-page input,
+    .shortcut-page textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 10px;
+      background-color: #313131;
+      color: white;
+      border: solid 1px transparent;
+      padding: 8px 10px;
+      outline: none;
+      resize: vertical;
+    }
+
+    .shortcut-page input:focus,
+    .shortcut-page textarea:focus {
+      border-color: rgb(125, 125, 125);
+    }
+
+    .shortcut-page textarea {
+      min-height: 72px;
+      font-family: inherit;
+    }
+
+    .shortcut-page .hint {
+      font-size: 11px;
+      color: #727272;
+      margin: -4px 0 14px;
+    }
+
+    .shortcut-page .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .shortcut-page .actions button {
+      border: none;
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      background-color: #313131;
+    }
+
+    .shortcut-page .actions button.primary {
+      background-color: #4a6cf7;
+    }
+
+    .shortcut-page .actions button:hover {
+      background-color: #656565;
+    }
+
+    .shortcut-page .actions button.primary:hover {
+      background-color: #3b5de7;
+    }
+
+    .shortcut-page .error {
+      color: #ff8e8e;
+      font-size: 12px;
+      min-height: 16px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body class="shortcut-page">
+  <div class="app">
+    <h1 id="title">Add shortcut</h1>
+    <div class="field">
+      <label id="triggerLabel" for="triggerInput">Shortcut name</label>
+      <input id="triggerInput" type="text" autocomplete="off" placeholder="correo" autofocus>
+    </div>
+    <p class="hint" id="hint">Type this in Geniemoji search, then press Enter to paste the text below.</p>
+    <div class="field">
+      <label id="valueLabel" for="valueInput">Text to paste</label>
+      <textarea id="valueInput" placeholder="correo@hotmail.com"></textarea>
+    </div>
+    <div class="error" id="error"></div>
+    <div class="actions">
+      <button type="button" id="cancelBtn">Cancel</button>
+      <button type="button" class="primary" id="saveBtn">Save</button>
+    </div>
+  </div>
+
+  <script src="../src/shortcut.js"></script>
+</body>
+
+</html>

@@ -16,3 +16,27 @@ rm -rf node_modules
 npm i
 ./node_modules/.bin/electron-rebuild
 ```
+
+## Windows / Linux
+
+From `app/windowsNlinux`:
+
+```
+npm install
+npm start
+```
+
+### Build Windows NSIS Setup.exe
+
+```
+npm run dist
+```
+
+Output: `dist/Geniemoji-Setup-<version>.exe`
+
+### Portable packages (optional)
+
+```
+npm run pack-win32-x64
+npm run pack-linux-x64
+```

@@ -1,3 +1,10 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
 * {
   background-color: #171717;
   color: white;
@@ -5,9 +12,19 @@
 
 .app {
   text-align: center;
-  padding-left: 10%;
-  padding-right: 10%;
   padding: 10px;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.app > form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .button {
@@ -18,13 +35,18 @@
 }
 
 #commandInput {
-  margin-top: 20px;
-  margin-bottom: 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
   text-align: left;
   max-width: 92%;
   border-radius: 15px;
   background-color: #313131;
   color: white;
+}
+
+/* Keep search field pinned above results in both list and grid */
+.app > form > center {
+  flex-shrink: 0;
 }
 
 /* This it the input field when it does not have focus */
@@ -44,7 +66,11 @@ input[type=text]:focus {
 #answer {
   margin-top: 2%;
   font-size: 16px;
-  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 22px;
 }
 
 .emojiButton {
@@ -54,6 +80,44 @@ input[type=text]:focus {
   border-radius: 4px;
   padding: 3px;
   margin: 2px;
+}
+
+.emojiGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  padding: 4px 2px 8px;
+}
+
+.emojiGridButton {
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.emojiGridButton:hover {
+  background-color: #3a3a3a;
+}
+
+/* Twemoji flag images — Windows cannot render flag emoji glyphs natively */
+.emojiFlag {
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.2em;
+  display: inline-block;
+}
+
+.emojiGridButton .emojiFlag {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
 }
 
 #info {
@@ -74,6 +138,55 @@ input[type=text]:focus {
 button[type=button]:focus {
   outline: none;
   background-color: #656565;
+}
+
+/* Arrow-key selection highlight while the search input keeps focus */
+.emojiButton.selected {
+  outline: none;
+  background-color: #656565;
+}
+
+.emojiGridButton.selected {
+  background-color: #3a3a3a;
+}
+
+.shortcutButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 96%;
+  text-align: left;
+}
+
+.shortcutTrigger {
+  font-weight: 600;
+}
+
+.shortcutPreview {
+  color: #8f8f8f;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shortcutPreview::before {
+  content: "→ ";
+}
+
+.shortcutGridButton {
+  font-size: 11px;
+  line-height: 1.1;
+  padding: 4px;
+  word-break: break-word;
+}
+
+.shortcutGridButton .shortcutTrigger {
+  font-weight: 600;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 ::-webkit-scrollbar {
